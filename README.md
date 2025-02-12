@@ -1,2 +1,4 @@
-# react_blog
-基于react+go的博客开发
+# 基于 react+go 开发的博客
+
+1. 前端开发
+2. 后端开发
