@@ -1,0 +1,144 @@
+// 基础用户信息接口
+interface UserInfo {
+  id: string;
+  name: string;
+  avatar: string;
+  bio: string;
+  email?: string;
+}
+
+// 社交媒体链接接口
+interface SocialLink {
+  platform: 'github' | 'twitter' | 'wechat' | 'linkedin';
+  url: string;
+}
+
+// 标签接口
+interface Tag {
+  id: string;
+  name: string;
+  color: string;
+}
+
+//导航接口
+interface MenuItem {  // 添加 export 关键字
+  name: string
+  to: string
+  icon?: React.ComponentType
+  children?: MenuItem[]
+}
+
+// 文章接口
+interface Article {
+  id: string;
+  title: string;
+  content: string;
+  summary: string;
+  cover?: string;
+  author: UserInfo;
+  tags: Tag[];
+  createTime: string;
+  updateTime: string;
+  viewCount: number;
+  likeCount: number;
+}
+
+// 评论接口
+interface Comment {
+  id: string;
+  content: string;
+  author: UserInfo;
+  createTime: string;
+  replyTo?: string;
+  likes: number;
+}
+
+// 分页接口
+interface Pagination {
+  current: number;
+  pageSize: number;
+  total: number;
+}
+
+// 响应数据接口
+interface ResponseData<T> {
+  code: number;
+  message: string;
+  data: T;
+}
+
+// 列表响应数据接口
+interface ListResponse<T> {
+  list: T[];
+  pagination: Pagination;
+}
+
+// 主题配置接口
+interface ThemeConfig {
+  primaryColor: string;
+  secondaryColor: string;
+  backgroundColor: string;
+  textColor: string;
+}
+
+//主页右侧接口
+interface RightSideProps {
+  avatar: string;
+  name: string;
+  bio: string;
+  socialLinks: SocialLink[];
+  tags: Tag[];
+}
+
+// 声明全局类型
+declare global {
+  // 扩展 Window 接口
+  interface Window {
+    __THEME_CONFIG__: ThemeConfig;
+  }
+
+  // 声明模块
+  declare module '*.svg' {
+    const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+    export default content;
+  }
+
+  declare module '*.png' {
+    const value: string;
+    export default value;
+  }
+
+  declare module '*.jpg' {
+    const value: string;
+    export default value;
+  }
+
+  declare module '*.jpeg' {
+    const value: string;
+    export default value;
+  }
+
+  declare module '*.gif' {
+    const value: string;
+    export default value;
+  }
+
+  declare module '*.webp' {
+    const value: string;
+    export default value;
+  }
+}
+
+export type {
+  UserInfo,
+  SocialLink,
+  Tag,
+  Article,
+  Comment,
+  RightSideProps,
+  Pagination,
+  ResponseData,
+  ListResponse,
+  ThemeConfig,
+  MenuItem,
+};

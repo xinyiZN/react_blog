@@ -36,7 +36,13 @@
     // 启用增量编译，加快后续编译速度
     "incremental": true,
     // 指定增量编译信息文件的路径
-    "tsBuildInfoFile": "./.tsbuildinfo"
+    "tsBuildInfoFile": "./.tsbuildinfo",
+    //指定配置的全局typescript变量类型
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ]
+  
   },
   // 包含的文件或目录
   "include": ["src"],

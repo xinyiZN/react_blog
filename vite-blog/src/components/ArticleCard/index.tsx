@@ -3,6 +3,7 @@ import { Card, Tag, Space } from 'antd';
 import { CalendarOutlined, FolderOutlined } from '@ant-design/icons';
 
 interface ArticleCardProps {
+  id: string;
   title: string;
   desc: string;
   date: string;
@@ -12,6 +13,7 @@ interface ArticleCardProps {
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({
+  id,
   title,
   desc,
   date,
@@ -19,13 +21,21 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   tags,
   onClick,
 }) => {
+  const handleClick = () => {
+    window.location.href = `/article/${id}`;
+  };
+
   return (
     <Card
       hoverable
-      onClick={onClick}
-      style={{ marginBottom: 16 }}
+      onClick={handleClick}
+      style={{ marginBottom: 10, cursor: 'pointer' }}
     >
-      <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>{title}</h2>
+      <h2 style={{ 
+        fontSize: '1.8rem', 
+        marginBottom: '0.5rem',
+        fontWeight: 'bold'
+      }}>{title}</h2>
       
       <Space style={{ marginBottom: '1rem' }}>
         <Space>

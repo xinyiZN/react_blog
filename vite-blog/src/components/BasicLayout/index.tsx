@@ -9,7 +9,11 @@ const BasicLayout: React.FC = () => {
      <header>
        <MyNav/>
       </header>
-      <main>
+      <main style={{
+        marginTop: '1em',
+        width: '90%',
+        margin: '1em auto'  // 使用auto实现水平居中
+      }}>
           {/* Outlet 用于渲染子路由内容 */}
           <Outlet />
       </main>

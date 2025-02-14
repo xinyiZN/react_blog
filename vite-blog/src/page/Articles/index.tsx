@@ -74,8 +74,9 @@ function Articles() {
     <div className="articles-container">
       <Row gutter={[16, 16]}>
         {articles.map((article: Article, index) => (
-          <Col xs={24} key={article.id}>
+          <Col xs={24} sm={24} md={24} lg={24} xl={24} key={article.id}>
             <ArticleCard
+              id={article.id}
               title={article.title}
               desc={article.desc}
               date={article.date}
