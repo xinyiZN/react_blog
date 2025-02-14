@@ -1,10 +1,8 @@
-import React from 'react'
-import { Button } from 'antd'
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
 
-const App = () => (
-  <div className="App">
-    <Button type="primary">Button</Button>
-  </div>
-)
+function App() {
+  return <RouterProvider router={router} />;
+}
 
-export default App
+export default App;

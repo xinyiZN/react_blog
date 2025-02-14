@@ -2,7 +2,8 @@
   "useTabs": false,
   "tabWidth": 2,
   "printWidth": 80,
-  "singleQuote": true,
+  "singleQuote": false,
+  "jsxSingleQuote": false,
   "trailingComma": "none",
   "semi": false,
   "endOfLine": "lf"
