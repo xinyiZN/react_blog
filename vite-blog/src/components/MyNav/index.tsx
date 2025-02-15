@@ -4,17 +4,20 @@ import { UserOutlined,SmileFilled  } from "@ant-design/icons"
 import { Input, Dropdown} from "antd"
 import Menus from "./config"
 import "./index.scss"
-import type { MenuItem} from "@/types"
+import type { MenuProps } from 'antd'
+import type { MenuItem } from "@/types"
+
 const MyNav: React.FC = () => {
-  const getDropdownItems = (children: MenuItem[]) => {
+  const getDropdownItems = (children: MenuItem[]): MenuProps['items'] => {
     return children.map(child => ({
-      key: child.to,
+      key: child.to ?? '',
       label: (
-        <NavLink to={child.to}>
+        <NavLink to={child.to ?? ''}>
           {child.icon && <child.icon />}
           <span>{child.name}</span>
         </NavLink>
-      )
+      ),
+      type: 'item' as const
     }))
   }
 
@@ -22,23 +25,24 @@ const MyNav: React.FC = () => {
     <>
       <nav className="nav">
         <div className="homeSvg">
-          <NavLink to="/" style={{ color: '#333' }}><SmileFilled style={{color:'#333'}} />XIN's 博客</NavLink>
+
+          <NavLink to="/" style={{ color: '#333' }}><SmileFilled  className="icon"/>XIN's 博客</NavLink>
         </div>
         <ul className="nav-menu">
           {Menus.map((item) => (
-            <li key={item.to}>
+            <li key={item.name}>
               {item.children ? (
                 <Dropdown
                   menu={{ items: getDropdownItems(item.children) }}
                   placement="bottom"
                 >
-                  <NavLink to={item.to}>
+                  <span>
                     {item.icon && <item.icon />}
                     <span>{item.name}</span>
-                  </NavLink>
+                  </span>
                 </Dropdown>
               ) : (
-                <NavLink to={item.to}>
+                <NavLink to={item.to || ''}>
                   {item.icon && <item.icon />}
                   <span>{item.name}</span>
                 </NavLink>

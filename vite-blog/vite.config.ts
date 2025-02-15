@@ -15,7 +15,12 @@ export default defineConfig({
       '/api/v1': {
         target: 'http://127.0.0.1:8000',
         changeOrigin: true,
+      },
+      '/assets': {  // 添加静态资源的代理配置
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
       }
-    }
+    },
+
   }
 })

@@ -8,10 +8,12 @@ import (
 
 type Tag struct {
 	Model
-	Name       string `json:"name"`
-	CreatedBy  string `json:"created_by"`
-	ModifiedBy string `json:"modified_by"`
-	State      int    `json:"state"`
+	Name         string `json:"name"`
+	CreatedBy    string `json:"created_by"`
+	ModifiedBy   string `json:"modified_by"`
+	State        int    `json:"state"`
+	Color        string `json:"color"`
+	ArticleCount int    `json:"article_count"`
 }
 
 // 当向 Find方法传入一个结构体切片指针

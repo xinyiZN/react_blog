@@ -1,4 +1,18 @@
-// 基础用户信息接口
+//社交媒体信息接口
+interface SocialLink {
+  id: string;
+  platform: string;
+  url: string;
+}
+//个人用户信息
+interface AuthInfo {
+  id: string,
+  name: string,
+  des: string
+  avatar: string,
+  socials: SocialLink[]
+}
+// 评论用户信息接口
 interface UserInfo {
   id: string;
   name: string;
@@ -7,45 +21,51 @@ interface UserInfo {
   email?: string;
 }
 
-// 社交媒体链接接口
-interface SocialLink {
-  platform: 'github' | 'twitter' | 'wechat' | 'linkedin';
-  url: string;
-}
+
 
 // 标签接口
 interface Tag {
-  id: string;
+  id: number;
   name: string;
   color: string;
+  article_count?: number
 }
 
 //导航接口
 interface MenuItem {  // 添加 export 关键字
   name: string
-  to: string
+  to?: string
   icon?: React.ComponentType
   children?: MenuItem[]
 }
 
 // 文章接口
 interface Article {
-  id: string;
+  id: number;
   title: string;
-  content: string;
-  summary: string;
-  cover?: string;
-  author: UserInfo;
-  tags: Tag[];
-  createTime: string;
-  updateTime: string;
-  viewCount: number;
-  likeCount: number;
+  created_on: number;
+  desc: string;
+  date: string;
+  category: string;
+  tags: string[];
 }
 
+interface ArticleApi {
+  id: number;
+  title: string;
+  created_on: number;
+  desc: string;
+  date: string;
+  category: {
+    name: string;
+  };
+  tags: {
+    name: string;
+  }[];
+}
 // 评论接口
 interface Comment {
-  id: string;
+  id: number;
   content: string;
   author: UserInfo;
   createTime: string;
@@ -85,9 +105,9 @@ interface ThemeConfig {
 interface RightSideProps {
   avatar: string;
   name: string;
-  bio: string;
+  des: string;
   socialLinks: SocialLink[];
-  tags: Tag[];
+  tags: Tag[] | undefined;
 }
 
 // 声明全局类型
@@ -134,6 +154,7 @@ export type {
   SocialLink,
   Tag,
   Article,
+  ArticleApi,
   Comment,
   RightSideProps,
   Pagination,
@@ -141,4 +162,6 @@ export type {
   ListResponse,
   ThemeConfig,
   MenuItem,
+  AuthInfo,
+  SocialLink,
 };

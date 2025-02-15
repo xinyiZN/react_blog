@@ -1,35 +1,50 @@
-import Articles from "../Articles"
+import { useState, useEffect } from "react"
+import Articles from "@/page/Articles";
 import RightSide from '@/components/RightSide';
 import "./index.scss"
-interface SocialLink {
-  platform: 'github' | 'twitter' | 'wechat';
-  url: string;
-}
-function Home() {
-  const socialLinks :SocialLink[]= [
-    { platform: 'github', url: 'https://github.com/yourusername' },
-    { platform: 'twitter', url: 'https://twitter.com/yourusername' },
-    { platform: 'wechat', url: '#' }
-  ];
+import { AuthInfo,Tag } from "@/types";
+import { authApi } from "@/api/AuthApi";
+import { tagApi } from "@/api/TagsApi";
 
-  const tags = [
-    { name: 'React', color: '#61dafb' },
-    { name: 'TypeScript', color: '#3178c6' },
-    { name: '前端开发', color: '#f50' },
-    { name: 'JavaScript', color: '#f0db4f' }
-  ];
+
+function Home() {
+  const [auth, setAuth] = useState<AuthInfo>()
+  const [tags,setTags]=useState<Tag[]>()
+  useEffect(() => {
+    const getAuthInfo = async () => {
+      const data = await authApi.getAuthInfo()
+      if (data) {
+        setAuth(data)
+      } else {
+        console.log("获取用户数据失败")
+      }
+    }
+    const getTags = async () => {
+      const data = await tagApi.getTags()
+      if (data) {
+        console.log("标签：", data)
+        setTags(data)
+      } else {
+        console.log("标签获取失败")
+      }
+    }
+    getAuthInfo()
+    getTags()
+  },[])
+
 
   return (
     <div className="main-content">
-        <Articles />
-        <RightSide
-          avatar="/avatar.jpg"
-          name="XXINYI"
-          bio="前端开发工程师 / React爱好者"
-          socialLinks={socialLinks}
-          tags={tags}
-        />
-    
+      <div className="articles-container"><Articles /></div>
+      {
+        auth &&  <RightSide
+        avatar={auth.avatar}
+        name={auth.name}
+        des="前端开发工程师 / React爱好者"
+        socialLinks={auth.socials}
+        tags={tags}
+      />
+      }
     </div>
   )
 }

@@ -15,9 +15,10 @@ var (
 	HTTPPort     int
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
-
-	PageSize  int
-	JwtSecret string
+	IMGPath      string
+	MDPath       string
+	PageSize     int
+	JwtSecret    string
 )
 
 func init() {
@@ -34,6 +35,9 @@ func init() {
 
 func LoadBase() {
 	RunMode = Cfg.Section("").Key("RUN_MODE").MustString("debug")
+	//静态资源目录
+	IMGPath = Cfg.Section("static").Key("IMG_PATH").MustString("./assets/img")
+	MDPath = Cfg.Section("static").Key("MD_PATH").MustString("./assets/md")
 }
 
 func LoadServer() {

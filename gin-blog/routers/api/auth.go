@@ -52,3 +52,22 @@ func GetAuth(c *gin.Context) {
 		"data": data,
 	})
 }
+
+// 只读取用户信息————博客只有一个用户
+func GetAuthForBlog(c *gin.Context) {
+	auth, err := models.GetAuth(map[string]interface{}{})
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": e.ERROR,
+			"msg":  e.GetMsg(e.ERROR),
+			"data": nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": e.SUCCESS,
+		"msg":  e.GetMsg(e.SUCCESS),
+		"data": auth,
+	})
+}

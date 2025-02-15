@@ -21,6 +21,7 @@ type Article struct {
 	CreatedBy  string   `json:"created_by"`
 	ModifiedBy string   `json:"modified_by"`
 	State      int      `json:"state"`
+	Url        string   `json:"url"`
 }
 
 // 根据文章ID判断文章是否存在
@@ -99,14 +100,17 @@ func AddArticle(data map[string]interface{}) bool {
 		}
 	}
 
+	title := data["title"].(string)
+
 	article := Article{
-		Title:      data["title"].(string),
+		Title:      title,
 		Desc:       data["desc"].(string),
 		Content:    data["content"].(string),
 		CreatedBy:  data["created_by"].(string),
 		State:      data["state"].(int),
 		CategoryID: data["category_id"].(int),
-		TagIDs:     strings.Join(tagIDStrs, ","), // 将标签ID数组转换为逗号分隔的字符串
+		TagIDs:     strings.Join(tagIDStrs, ","),
+		Url:        data["markdown"].(string),
 	}
 
 	db.Create(&article)

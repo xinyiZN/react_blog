@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { GithubOutlined, TwitterOutlined, WechatOutlined } from '@ant-design/icons';
+import { GithubOutlined, TwitterOutlined, WechatOutlined,MailOutlined,QqOutlined} from '@ant-design/icons';
 import { Tag } from 'antd';
 import './index.scss';
 import type {RightSideProps} from "@/types"
+import { useNavigate } from 'react-router-dom';
 
 
 const RightSide: React.FC<RightSideProps> = ({
   avatar,
   name,
-  bio,
+  des,
   socialLinks,
   tags
 }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const navigate = useNavigate();
 
   // 更新当前时间
   useEffect(() => {
@@ -31,9 +33,18 @@ const RightSide: React.FC<RightSideProps> = ({
         return <TwitterOutlined className="social-icon" />;
       case 'wechat':
         return <WechatOutlined className="social-icon" />;
+      case 'email':
+        return <MailOutlined className="social-icon" />;
+      case 'qq':
+        return <QqOutlined className="social-icon"/>
       default:
         return null;
     }
+  };
+
+  const handleTagClick = (tagId: number) => {
+    // navigate(`/tags/${tagId}`);
+    console.log("点击的tag为：",tagId)
   };
 
   return (
@@ -46,7 +57,7 @@ const RightSide: React.FC<RightSideProps> = ({
           className="avatar"
         />
         <h2 className="name">{name}</h2>
-        <p className="bio">{bio}</p>
+        <p className="bio">{des}</p>
         {/* 社交媒体链接 */}
         <div className="social-links">
           {socialLinks.map((link, index) => (
@@ -76,12 +87,17 @@ const RightSide: React.FC<RightSideProps> = ({
         </p>
       </div>
       </div>
-      {/* 标签云区域 */}
+      {/* 标签区域 */}
       <div className="tags-section">
-        <h3>标签云</h3>
+        <h3>标签</h3>
         <div className="tags-container">
-          {tags.map((tag, index) => (
-            <Tag key={index} color={tag.color}>
+          {tags?.map((tag, index) => (
+            <Tag 
+              key={index} 
+              color={tag.color}
+              onClick={() => handleTagClick(tag.id)}
+              style={{ cursor: 'pointer' }}
+            >
               {tag.name}
             </Tag>
           ))}

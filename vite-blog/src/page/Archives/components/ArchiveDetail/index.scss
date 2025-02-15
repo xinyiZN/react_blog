@@ -1,0 +1,47 @@
+.archive-container {
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: 60px; // 添加底部内边距，为 footer 留出空间
+  min-height: calc(100vh - 60px); // 调整减去的高度值，只考虑header高度
+  box-sizing: border-box; // 确保padding不会增加总高度
+  margin-bottom: 60px; // 添加外边距来为 footer 留出空间
+  .archive-total {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 40px;
+  }
+
+  .archive-year-section {
+    margin-bottom: 40px;
+
+    .year-title {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+  }
+
+  .archive-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      color: #1890ff;
+    }
+
+    .article-date {
+      font-size: 16px;
+      color: #666;
+      width: 80px;
+      margin-right: 20px;
+    }
+
+    .article-title {
+      font-size: 16px;
+      flex: 1;
+    }
+  }
+}

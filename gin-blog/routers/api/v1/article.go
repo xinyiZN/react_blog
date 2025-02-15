@@ -1,8 +1,12 @@
 package v1
 
 import (
+	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
@@ -100,6 +104,30 @@ func AddArticle(c *gin.Context) {
 	createdBy := c.PostForm("created_by")
 	state := com.StrTo(c.DefaultPostForm("state", "0")).MustInt()
 	categoryId := com.StrTo(c.PostForm("category_id")).MustInt()
+	// 处理文件上传
+	file, err := c.FormFile("markdown_file")
+	// var coverImagePath string
+	var markdownPath string
+	if err == nil {
+		// 生成唯一的文件名
+		fileExt := filepath.Ext(file.Filename)
+		fileName := fmt.Sprintf("%d%s", time.Now().Unix(), fileExt)
+
+		// 确保上传目录存在
+		uploadDir := "assets/md"
+		if err := os.MkdirAll(uploadDir, 0755); err != nil {
+			logging.Error("创建上传目录失败：%v", err)
+		}
+
+		// 保存文件
+		dst := filepath.Join(uploadDir, fileName)
+		if err := c.SaveUploadedFile(file, dst); err != nil {
+			logging.Error("保存文件失败：%v", err)
+		} else {
+			markdownPath = filepath.ToSlash(dst) // 将路径转换为正斜杠格式
+			logging.Info("文件上传成功：%s", markdownPath)
+		}
+	}
 
 	// 添加日志输出
 	logging.Info("接收到的参数：")
@@ -110,7 +138,7 @@ func AddArticle(c *gin.Context) {
 	logging.Info("created_by: %v", createdBy)
 	logging.Info("state: %v", state)
 	logging.Info("category_id: %v", categoryId)
-
+	logging.Info("markdown: %v", markdownPath)
 	// 将标签ID字符串转换为整数数组
 	var tagIDs []int
 	if tagIDsStr != "" {
@@ -124,8 +152,8 @@ func AddArticle(c *gin.Context) {
 	valid := validation.Validation{}
 	valid.Required(tagIDs, "tag_ids").Message("标签ID不能为空")
 	valid.Required(title, "title").Message("标题不能为空")
-	valid.Required(desc, "desc").Message("简述不能为空")
-	valid.Required(content, "content").Message("内容不能为空")
+	valid.Required(desc, "desc").Message("描述不能为空")
+	// valid.Required(content, "content").Message("内容不能为空")
 	valid.Required(createdBy, "created_by").Message("创建人不能为空")
 	valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
 	valid.Min(categoryId, 1, "category_id").Message("类别ID必须大于0")
@@ -151,6 +179,12 @@ func AddArticle(c *gin.Context) {
 			data["created_by"] = createdBy
 			data["state"] = state
 			data["category_id"] = categoryId
+
+			// 添加文件路径
+			if markdownPath != "" {
+				logging.Info("上传的文件路径 %s", markdownPath)
+				data["markdown"] = markdownPath
+			}
 
 			models.AddArticle(data)
 			code = e.SUCCESS
