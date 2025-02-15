@@ -56,3 +56,5 @@
 [INFO][article.go:140]2025/02/15 18:13:19 [category_id: %v 1]
 [INFO][article.go:141]2025/02/15 18:13:19 [markdown: %v assets/md/1739614399.md]
 [INFO][article.go:185]2025/02/15 18:13:19 [上传的文件路径 %s assets/md/1739614399.md]
+[INFO][router.go:19]2025/02/15 18:43:04 [文件路径 %s assets/md]
+[INFO][router.go:19]2025/02/15 19:14:42 [文件路径 %s assets/md]

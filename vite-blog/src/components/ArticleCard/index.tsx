@@ -1,14 +1,16 @@
 import React from 'react';
 import { Card, Tag, Space } from 'antd';
 import { CalendarOutlined, FolderOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 interface ArticleCardProps {
-  id: string;
+  id: number;
   title: string;
   desc: string;
   date: string;
   category: string;
   tags: string[];
+  filePath?:string,
   onClick?: () => void;
 }
 
@@ -19,10 +21,14 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   date,
   category,
   tags,
-  onClick,
+  filePath,
 }) => {
+  const navigate = useNavigate();
+  
   const handleClick = () => {
-    window.location.href = `/article/${id}`;
+      const parts = filePath?.split("/") as string[];
+      const filepath = parts[parts.length - 1];
+    navigate(`/article/${filepath}`);
   };
 
   return (

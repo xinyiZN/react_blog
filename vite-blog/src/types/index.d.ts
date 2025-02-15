@@ -47,6 +47,7 @@ interface Article {
   desc: string;
   date: string;
   category: string;
+  url?: string,
   tags: string[];
 }
 
@@ -62,7 +63,9 @@ interface ArticleApi {
   tags: {
     name: string;
   }[];
+  url?: string;
 }
+
 // 评论接口
 interface Comment {
   id: number;

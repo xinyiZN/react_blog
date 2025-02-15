@@ -1,11 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from "@/page/Home";
-import Articles from '@/page/Archives';
+import Archive from '@/page/Archives';
 import Tags from '@/page/Tags';
 import Msg from '@/page/Msg';
 import About from '@/page/About';
 import BasicLayout from '@/components/BasicLayout';
-import Archive from '@/page/Archives';
+import ArticleDetail from '@/page/Articles/ArticleDetail';
 // 引入其他需要的页面组件
 
 const router = createBrowserRouter([
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       },
       {
         path: "archives",
-        element: <Articles/>,
+        element: <Archive/>,
       },
       {
         path: "tags",
@@ -33,7 +33,10 @@ const router = createBrowserRouter([
         path: "about",
         element: <About />,
       },
-      // 其他路由配置
+      {
+        path: "article/:filepath",
+        element:<ArticleDetail/>
+      }
     ],
   },
 ]);

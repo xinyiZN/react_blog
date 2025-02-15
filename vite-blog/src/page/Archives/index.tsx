@@ -13,7 +13,7 @@ const Archives: React.FC = () => {
     const fetchArchives = async () => {
       try {
         const response = await articlesApi.getTotalArticle();
-        console.log("获取的所有文章数据：",response.data.data.lists);
+       
         setArticles(response.data.data.lists);
       } catch (error) {
         console.error('获取归档数据失败:', error);

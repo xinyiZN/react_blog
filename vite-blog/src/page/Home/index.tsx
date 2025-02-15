@@ -22,7 +22,6 @@ function Home() {
     const getTags = async () => {
       const data = await tagApi.getTags()
       if (data) {
-        console.log("标签：", data)
         setTags(data)
       } else {
         console.log("标签获取失败")

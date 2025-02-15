@@ -16,7 +16,6 @@ function Tags() {
       setLoading(true)
       try {
         const data = await tagApi.getTags()
-        console.log("获取标签:", data)
         setTags(data)
       } catch (error) {
         console.error("获取标签失败:", error)

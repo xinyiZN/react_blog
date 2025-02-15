@@ -3,29 +3,8 @@ import {Row, Col } from "antd"
 import ArticleCard from "@/components/ArticleCard"
 import MyPagination from "@/components/MyPagination";
 import { fetchArticles } from "@/utils/getArticles"
+import { Article,ArticleApi} from "@/types";
 
-interface ArticleApi {
-  id: string;
-  title: string;
-  created_on: number;
-  desc: string;
-  date: string;
-  category: {
-    name: string;
-  };
-  tags:{
-    name: string;
-  }[];
-}
-interface Article {
-  id: string;
-  title: string;
-  created_on: number;
-  desc: string;
-  date: string;
-  category:  string;
-  tags:string[];
-}
 function Articles() {
   // 文章列表数据状态
   const [articles, setArticles] = useState<Article[]>([])
@@ -48,7 +27,8 @@ function Articles() {
           desc: item.desc,
           date: new Date(item.created_on * 1000).toLocaleDateString(),
           category: item.category.name,
-          tags: item.tags.map(tag => tag.name) 
+          tags: item.tags.map(tag => tag.name),
+          url:item.url,
         }));
         setArticles(formattedArticles)
         setPagination(prev => ({
@@ -79,7 +59,7 @@ function Articles() {
   return (
     <div>
       <Row gutter={[16, 16]}>
-        {getCurrentPageArticles().map((article: Article, index) => (
+        {getCurrentPageArticles().map((article: Article) => (
           <Col xs={24} sm={24} md={24} lg={24} xl={24} key={article.id}>
             <ArticleCard
               id={article.id}
@@ -88,10 +68,7 @@ function Articles() {
               date={article.date}
               category={article.category}
               tags={article.tags}
-              onClick={() => {
-                console.log('Article clicked:', article.id);
-              }}
-              key={index}
+              filePath={article.url}
             />
           </Col>
         ))}
