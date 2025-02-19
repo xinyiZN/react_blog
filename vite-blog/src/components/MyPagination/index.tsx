@@ -1,11 +1,11 @@
-import React from 'react';
-import { Pagination } from 'antd';
+import React from "react"
+import { Pagination } from "antd"
 
 interface MyPaginationProps {
-  total: number;                    // 总条目数
-  current: number;                  // 当前页码
-  pageSize: number;                 // 每页显示条数
-  onChange: (page: number, pageSize: number) => void;  // 页码改变的回调
+  total: number // 总条目数
+  current: number // 当前页码
+  pageSize: number // 每页显示条数
+  onChange: (page: number, pageSize: number) => void // 页码改变的回调
 }
 
 const MyPagination: React.FC<MyPaginationProps> = (props) => {
@@ -19,7 +19,7 @@ const MyPagination: React.FC<MyPaginationProps> = (props) => {
         onChange={props.onChange}
       />
     </div>
-  );
-};
+  )
+}
 
-export default MyPagination;
+export default MyPagination

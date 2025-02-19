@@ -1,5 +1,12 @@
-import { HomeFilled, BookFilled, SwitcherFilled, TagsFilled, MessageFilled, FireFilled } from '@ant-design/icons';
-import { MenuItem } from '@/types';
+import {
+  HomeFilled,
+  BookFilled,
+  SwitcherFilled,
+  TagsFilled,
+  MessageFilled,
+  FireFilled
+} from "@ant-design/icons"
+import { MenuItem } from "@/types"
 
 const Menus: MenuItem[] = [
   { name: "首页", to: "/", icon: HomeFilled },
@@ -12,7 +19,7 @@ const Menus: MenuItem[] = [
     ]
   },
   { name: "留言", to: "/msg", icon: MessageFilled },
-  { name: "友链", to: "/about", icon: FireFilled },
+  { name: "友链", to: "/about", icon: FireFilled }
 ]
 
 export default Menus

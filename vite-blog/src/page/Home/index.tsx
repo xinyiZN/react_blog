@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react"
-import Articles from "@/page/Articles";
-import RightSide from '@/components/RightSide';
+import Articles from "@/page/Articles"
+import RightSide from "@/components/RightSide"
 import "./index.scss"
-import { AuthInfo,Tag } from "@/types";
-import { authApi } from "@/api/AuthApi";
-import { tagApi } from "@/api/TagsApi";
-
+import { AuthInfo, Tag } from "@/types"
+import { authApi } from "@/api/AuthApi"
+import { tagApi } from "@/api/TagsApi"
 
 function Home() {
   const [auth, setAuth] = useState<AuthInfo>()
-  const [tags,setTags]=useState<Tag[]>()
+  const [tags, setTags] = useState<Tag[]>()
   useEffect(() => {
     const getAuthInfo = async () => {
       const data = await authApi.getAuthInfo()
@@ -29,21 +28,22 @@ function Home() {
     }
     getAuthInfo()
     getTags()
-  },[])
-
+  }, [])
 
   return (
     <div className="main-content">
-      <div className="articles-container"><Articles /></div>
-      {
-        auth &&  <RightSide
-        avatar={auth.avatar}
-        name={auth.name}
-        des="前端开发工程师 / React爱好者"
-        socialLinks={auth.socials}
-        tags={tags}
-      />
-      }
+      <div className="articles-container">
+        <Articles />
+      </div>
+      {auth && (
+        <RightSide
+          avatar={auth.avatar}
+          name={auth.name}
+          des="前端开发工程师 / React爱好者"
+          socialLinks={auth.socials}
+          tags={tags}
+        />
+      )}
     </div>
   )
 }

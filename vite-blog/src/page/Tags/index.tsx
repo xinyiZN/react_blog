@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import { tagApi } from "@/api/TagsApi"
 import { Tag as TagItem } from "@/types"
 import { useNavigate } from "react-router-dom"
-import TagCloudComponent from './components/TagCloud';
+import TagCloudComponent from "./components/TagCloud"
 import "./index.scss"
-import ChildrenLayout from "@/components/ChildrenLayout";
+import ChildrenLayout from "@/components/ChildrenLayout"
 
 function Tags() {
   const [tags, setTags] = useState<TagItem[]>([])
@@ -31,15 +31,14 @@ function Tags() {
   const handleTagClick = (tagId: number) => {
     navigate(`/articles?tag=${tagId}`)
   }
-  return (
+  return loading ? (
     <ChildrenLayout
       title="标签"
       backgroundImage={"/assets/img/background.jpeg"}
-      children={<TagCloudComponent
-                 tags={tags}
-                 onTagClick={handleTagClick}
-          />}
+      children={<TagCloudComponent tags={tags} onTagClick={handleTagClick} />}
     />
+  ) : (
+    <div>没有数据</div>
   )
 }
 

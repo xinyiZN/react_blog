@@ -1,5 +1,5 @@
-import http from "@/utils/axios";
-import { AuthInfo } from "@/types";
+import http from "@/utils/axios"
+import { AuthInfo } from "@/types"
 const getUrl = (path: string) => `${path}`
 
 export const authApi = {

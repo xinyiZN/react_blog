@@ -1,14 +1,14 @@
-import { TagCloud } from 'react-tagcloud';
+import { TagCloud } from "react-tagcloud"
 import { Tag as TagItem } from "@/types"
 import "./index.scss"
 interface TagCloudComponentProps {
-  tags: TagItem[];
-  onTagClick: (tagId: number) => void;
+  tags: TagItem[]
+  onTagClick: (tagId: number) => void
 }
 
 function TagCloudComponent({ tags, onTagClick }: TagCloudComponentProps) {
   // 转换标签数据为词云格式
-  const cloudTags = tags.map(tag => ({
+  const cloudTags = tags.map((tag) => ({
     value: tag.name,
     count: tag.article_count || 1,
     key: String(tag.id),
@@ -21,7 +21,7 @@ function TagCloudComponent({ tags, onTagClick }: TagCloudComponentProps) {
         minSize={12}
         maxSize={35}
         tags={cloudTags}
-        onClick={(tag: any) => onTagClick(Number(tag.key))}
+        onClick={(tag) => onTagClick(Number(tag.key))}
         className="cursor-pointer"
       />
     </div>

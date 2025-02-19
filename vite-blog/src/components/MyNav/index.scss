@@ -3,40 +3,35 @@ nav {
   justify-items: center;
   align-items: center;
   justify-content: space-around;
-  font-size:20px;
-  margin-top:1em;
-  .icon{
-    size:18px;
-    color:#333;
+  font-size: 20px;
+  margin-top: 1em;
+  .icon {
+    size: 18px;
+    color: #333;
   }
 
   ul {
     list-style-type: none;
     margin: 0;
-    padding:0;
+    padding: 0;
     li {
       display: inline-block;
       margin-left: 1.5em;
       font-size: 18px;
-      color:#333;
+      color: #333;
       a {
         color: #333;
-        font-size:18px;
+        font-size: 18px;
       }
-  
     }
-    
   }
-  .rightBar{
+  .rightBar {
     display: flex;
     justify-items: center;
     justify-content: space-around;
     align-items: center;
-    .adminSvg{
+    .adminSvg {
       margin-left: 15px;
     }
   }
-  
 }
-
-

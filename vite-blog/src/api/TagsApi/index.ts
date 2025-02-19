@@ -1,5 +1,5 @@
-import http from "@/utils/axios";
-import { Tag } from "@/types";
+import http from "@/utils/axios"
+import { Tag } from "@/types"
 
 const getUrl = (path: string) => `${path}`
 
@@ -12,12 +12,15 @@ export const tagApi = {
     })
 
     // 只保留需要的属性
-    const simplifiedTags = data.data.lists.map(({ id, name, color, article_count }: any) => ({
-      id,
-      name,
-      color,
-      article_count
-    }))
+    const simplifiedTags = data.data.lists.map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ({ id, name, color, article_count }: any) => ({
+        id,
+        name,
+        color,
+        article_count
+      })
+    )
     return simplifiedTags
-  },
+  }
 }

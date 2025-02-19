@@ -1,21 +1,21 @@
-import { Copy, Check } from "lucide-react";
-import { useState } from "react";
+import { Copy, Check } from "lucide-react"
+import { useState } from "react"
 
 const CopyButton = ({ id }: { id: string }) => {
-  const [copied, setCopited] = useState(false);
+  const [copied, setCopited] = useState(false)
 
   const onCopy = async () => {
     try {
-      setCopited(true);
-      const text = document.getElementById(id)!.innerText;
-      await navigator.clipboard.writeText(text);
+      setCopited(true)
+      const text = document.getElementById(id)!.innerText
+      await navigator.clipboard.writeText(text)
       setTimeout(() => {
-        setCopited(false);
-      }, 1000);
+        setCopited(false)
+      }, 1000)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   return (
     <button
@@ -35,7 +35,7 @@ const CopyButton = ({ id }: { id: string }) => {
         }`}
       />
     </button>
-  );
-};
+  )
+}
 
-export default CopyButton;
+export default CopyButton

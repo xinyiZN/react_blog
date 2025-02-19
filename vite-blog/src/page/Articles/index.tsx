@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
-import {Row, Col } from "antd"
+import { Row, Col } from "antd"
 import ArticleCard from "@/components/ArticleCard"
-import MyPagination from "@/components/MyPagination";
+import MyPagination from "@/components/MyPagination"
 import { fetchArticles } from "@/utils/getArticles"
-import { Article,ArticleApi} from "@/types";
+import { Article, ArticleApi } from "@/types"
 
 function Articles() {
   // 文章列表数据状态
@@ -21,17 +21,17 @@ function Articles() {
     const initArticles = async () => {
       const data = await fetchArticles()
       if (data) {
-        const formattedArticles = data.data.lists.map((item:ArticleApi ) => ({
+        const formattedArticles = data.data.lists.map((item: ArticleApi) => ({
           id: item.id.toString(),
           title: item.title,
           desc: item.desc,
           date: new Date(item.created_on * 1000).toLocaleDateString(),
           category: item.category.name,
-          tags: item.tags.map(tag => tag.name),
-          url:item.url,
-        }));
+          tags: item.tags.map((tag) => tag.name),
+          url: item.url
+        }))
         setArticles(formattedArticles)
-        setPagination(prev => ({
+        setPagination((prev) => ({
           ...prev,
           total: data.data.total || 0
         }))
@@ -42,9 +42,9 @@ function Articles() {
 
   // 获取当前页的文章
   const getCurrentPageArticles = () => {
-    const startIndex = (pagination.current - 1) * pagination.pageSize;
-    const endIndex = startIndex + pagination.pageSize;
-    return articles.slice(startIndex, endIndex);
+    const startIndex = (pagination.current - 1) * pagination.pageSize
+    const endIndex = startIndex + pagination.pageSize
+    return articles.slice(startIndex, endIndex)
   }
 
   // 更新处理页码变化的函数
@@ -73,8 +73,11 @@ function Articles() {
           </Col>
         ))}
       </Row>
-      
-      <div className="pagination-wrapper" style={{ textAlign: 'center', marginTop: '2rem' }}>
+
+      <div
+        className="pagination-wrapper"
+        style={{ textAlign: "center", marginTop: "2rem" }}
+      >
         <MyPagination
           total={pagination.total}
           current={pagination.current}
