@@ -8,19 +8,17 @@ import ChildrenLayout from "@/components/ChildrenLayout"
 
 function Tags() {
   const [tags, setTags] = useState<TagItem[]>([])
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     const fetchTags = async () => {
-      setLoading(true)
+      // setLoading(true)
       try {
         const data = await tagApi.getTags()
         setTags(data)
       } catch (error) {
         console.error("获取标签失败:", error)
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -31,15 +29,13 @@ function Tags() {
   const handleTagClick = (tagId: number) => {
     navigate(`/articles?tag=${tagId}`)
   }
-  return loading ? (
+  return (
     <ChildrenLayout
       title="标签"
       backgroundImage={"/assets/img/background.jpeg"}
       children={<TagCloudComponent tags={tags} onTagClick={handleTagClick} />}
     />
-  ) : (
-    <div>没有数据</div>
-  )
+  ) 
 }
 
 export default Tags
