@@ -5,6 +5,9 @@
   justify-content: center;
   .childTitle {
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -12,10 +15,7 @@
     height: 100%;
     border-radius: 4px;
     font-weight: 500;
-    padding: 15% 2%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 12% 2%;
     .overlay {
       position: absolute;
       top: 0;
@@ -27,26 +27,25 @@
     h1 {
       z-index: 1;
       color: #fff;
+      font-size: 35px;
+      font-weight: bold;
       text-align: center;
+      letter-spacing: 10px;
     }
-    .content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: absolute;
-      min-height: fit-content;
-      &:has(> :first-child:nth-last-child(-n+4)) {
-        min-height: 50%;
-      }
-      width: 80%;
-      background-color: #fff;
-      border-radius: 8px;
-      top: calc(100% - 70px);
-      left: 50%;
-      transform: translate(-50%);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    }
+  }
+  .childContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -8em;
+    height: 200px; // 添加一个固定的最小高度
+    z-index: 1;
+    min-height: fit-content;
+    width: 80%;
+    background-color: #eaf1f1;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   }
 }
 

@@ -35,7 +35,8 @@ function ArchivesTimeLine({ articles, onArticleClick }: ArchiveDetailComponentPr
   return (
     <div className="archive-container">
       <div className="archive-total">共计 {articles.length} 篇文章</div>
-      {Object.entries(groupedArticles)
+      <div className="archive-section">
+        {Object.entries(groupedArticles)
         .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
         .map(([year, months]) => (
           <div key={year} className="archive-year-section">
@@ -58,6 +59,7 @@ function ArchivesTimeLine({ articles, onArticleClick }: ArchiveDetailComponentPr
               ))}
           </div>
         ))}
+      </div>
     </div>
   );
 }

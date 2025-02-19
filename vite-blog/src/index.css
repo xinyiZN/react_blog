@@ -1,11 +1,11 @@
 /* global.css */
+@import "tailwindcss";
+@layer theme, base, components;
+@import "tailwindcss/theme" layer(theme);
+
 * {
   margin: 0;
   padding: 0;
-}
-
-.articles-container {
-  width: 90%;
 }
 
 
@@ -21,5 +21,3 @@ ul>li a,
 ul>li a:hover {
   text-decoration: none;
 }
-
-

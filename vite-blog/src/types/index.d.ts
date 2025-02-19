@@ -150,6 +150,7 @@ declare global {
     const value: string;
     export default value;
   }
+
 }
 
 export type {

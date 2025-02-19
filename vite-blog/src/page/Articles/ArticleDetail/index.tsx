@@ -1,3 +1,4 @@
+import ChildrenLayout from '@/components/ChildrenLayout';
 import Markdown from '@/components/Markdown';
 import React from 'react';
 import { useParams } from 'react-router-dom';
@@ -17,10 +18,18 @@ const ArticleDetail: React.FC = () => {
   }
 
   return (
-    <div className="article-detail">
-      {/* 将 filepath 传递给 Markdown 组件 */}
-      <Markdown filePath={filepath} />
-    </div>
+ 
+     <ChildrenLayout
+     title="文章详情"
+     backgroundImage={"/assets/img/background.jpeg"}
+     children={
+        <div className='flex justify-center m-10'>
+        {/* 将 filepath 传递给 Markdown 组件 */}
+        <Markdown filePath={filepath} />
+        </div>
+      }
+   />
+ 
   );
 };
 

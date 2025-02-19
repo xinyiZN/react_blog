@@ -18,9 +18,9 @@ const ChildrenLayout: React.FC<ChildrenLayoutProps> = ({ title, children, backgr
       >
         <div className="overlay"></div>
         <h1>{title}</h1>
-        <div className="content">
+      </div>
+      <div className="childContent">
         {children}
-        </div>
       </div>
     </div>
   );
