@@ -12,7 +12,7 @@
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
-    height: 100%;
+    height: 200px;
     border-radius: 4px;
     font-weight: 500;
     padding: 12% 2%;
@@ -38,8 +38,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: -8em;
-    height: 200px; // 添加一个固定的最小高度
+    margin-top: -40px;
+    height: 200px;
     z-index: 1;
     min-height: fit-content;
     width: 80%;

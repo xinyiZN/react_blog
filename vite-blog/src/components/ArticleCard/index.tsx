@@ -1,17 +1,17 @@
-import React from 'react';
-import { Card, Tag, Space } from 'antd';
-import { CalendarOutlined, FolderOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import React from "react"
+import { Card, Tag, Space } from "antd"
+import { CalendarOutlined, FolderOutlined } from "@ant-design/icons"
+import { useNavigate } from "react-router-dom"
 
 interface ArticleCardProps {
-  id: number;
-  title: string;
-  desc: string;
-  date: string;
-  category: string;
-  tags: string[];
-  filePath?:string,
-  onClick?: () => void;
+  id: number
+  title: string
+  desc: string
+  date: string
+  category: string
+  tags: string[]
+  filePath?: string
+  onClick?: () => void
 }
 
 const ArticleCard: React.FC<ArticleCardProps> = ({
@@ -21,29 +21,38 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   date,
   category,
   tags,
-  filePath,
+  filePath
 }) => {
-  const navigate = useNavigate();
-  
+  const navigate = useNavigate()
+
   const handleClick = () => {
-      const parts = filePath?.split("/") as string[];
-      const filepath = parts[parts.length - 1];
-    navigate(`/article/${filepath}`);
-  };
+    const parts = filePath?.split("/") as string[]
+    const filepath = parts[parts.length - 1]
+    console.log("filepath", filePath)
+    navigate(`/article/${id}`, {
+      state: {
+        filepath: filepath
+      }
+    })
+  }
 
   return (
     <Card
       hoverable
       onClick={handleClick}
-      style={{ marginBottom: 10, cursor: 'pointer' }}
+      style={{ marginBottom: 10, cursor: "pointer" }}
     >
-      <h2 style={{ 
-        fontSize: '1.8rem', 
-        marginBottom: '0.5rem',
-        fontWeight: 'bold'
-      }}>{title}</h2>
-      
-      <Space style={{ marginBottom: '1rem' }}>
+      <h2
+        style={{
+          fontSize: "1.8rem",
+          marginBottom: "0.5rem",
+          fontWeight: "bold"
+        }}
+      >
+        {title}
+      </h2>
+
+      <Space style={{ marginBottom: "1rem" }}>
         <Space>
           <CalendarOutlined />
           {date}
@@ -54,7 +63,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         </Space>
       </Space>
 
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: "1rem" }}>
         {tags.map((tag) => (
           <Tag key={tag} color="blue" style={{ marginRight: 8 }}>
             {tag}
@@ -62,9 +71,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
         ))}
       </div>
 
-      <p style={{ color: '#666', marginBottom: 0 }}>{desc}</p>
+      <p style={{ color: "#666", marginBottom: 0 }}>{desc}</p>
     </Card>
-  );
-};
+  )
+}
 
-export default ArticleCard;
+export default ArticleCard

@@ -23,7 +23,6 @@ func GetArticle(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 	valid := validation.Validation{}
 	valid.Min(id, 1, "id").Message("ID必须大于0")
-
 	code := e.INVALID_PARAMS
 	var data interface{}
 	if !valid.HasErrors() {
@@ -44,6 +43,23 @@ func GetArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.GetMsg(code),
+		"data": data,
+	})
+}
+
+// 模糊查询文章
+func SearchArticle(c *gin.Context) {
+	searchValue := c.Query("search")
+	fmt.Println("value:", searchValue)
+	if searchValue == "" {
+		// 如果没有提供 search 参数，就返回所有文章
+		GetArticles(c)
+		return
+	}
+	data := models.SearchArticle(searchValue)
+	c.JSON(http.StatusOK, gin.H{
+		"code": e.SUCCESS,
+		"msg":  e.GetMsg(e.SUCCESS),
 		"data": data,
 	})
 }

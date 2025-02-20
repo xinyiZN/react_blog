@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/astaxie/beego/validation"
@@ -130,5 +131,25 @@ func DeleteTag(c *gin.Context) {
 		"code": code,
 		"msg":  e.GetMsg(code),
 		"data": make(map[string]string),
+	})
+}
+
+// 通过tagid获取对应的所有文章
+func GetArticleByTag(c *gin.Context) {
+	id := com.StrTo(c.Param("id")).MustInt()
+	fmt.Println("tag-id:", id)
+	var data interface{}
+	code := e.ERROR_NOT_EXIST_TAG
+	//判断id是否存在
+	if models.ExistTagByID(id) {
+		fmt.Println("id存在")
+		data = models.GetArticleByTag(id)
+		code = e.SUCCESS
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": code,
+		"msg":  e.GetMsg(code),
+		"data": data,
 	})
 }

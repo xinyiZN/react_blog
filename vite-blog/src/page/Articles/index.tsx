@@ -8,7 +8,7 @@ import { Article, ArticleApi } from "@/types"
 function Articles() {
   // 文章列表数据状态
   const [articles, setArticles] = useState<Article[]>([])
-
+  const [loading, setLoading] = useState(true)
   // 分页参数设置
   const [pagination, setPagination] = useState({
     current: 1,
@@ -19,22 +19,28 @@ function Articles() {
   // 获取文章数据
   useEffect(() => {
     const initArticles = async () => {
-      const data = await fetchArticles()
-      if (data) {
-        const formattedArticles = data.data.lists.map((item: ArticleApi) => ({
-          id: item.id.toString(),
-          title: item.title,
-          desc: item.desc,
-          date: new Date(item.created_on * 1000).toLocaleDateString(),
-          category: item.category.name,
-          tags: item.tags.map((tag) => tag.name),
-          url: item.url
-        }))
-        setArticles(formattedArticles)
-        setPagination((prev) => ({
-          ...prev,
-          total: data.data.total || 0
-        }))
+      try {
+        const data = await fetchArticles()
+        if (data) {
+          const formattedArticles = data.data.lists.map((item: ArticleApi) => ({
+            id: item.id.toString(),
+            title: item.title,
+            desc: item.desc,
+            date: new Date(item.created_on * 1000).toLocaleDateString(),
+            category: item.category.name,
+            tags: item.tags.map((tag) => tag.name),
+            url: item.url
+          }))
+          setArticles(formattedArticles)
+          setPagination((prev) => ({
+            ...prev,
+            total: data.data.total || 0
+          }))
+        }
+      } catch (error) {
+        console.log("获取文章失败：", error)
+      } finally {
+        setLoading(false)
       }
     }
     initArticles()
@@ -55,7 +61,7 @@ function Articles() {
       pageSize: pageSize
     })
   }
-
+  if (loading) return <div>加载中...</div>
   return (
     <div>
       <Row gutter={[16, 16]}>

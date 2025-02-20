@@ -9,6 +9,7 @@ import {
 import { Tag } from "antd"
 import "./index.scss"
 import type { RightSideProps } from "@/types"
+import { useNavigate } from "react-router-dom"
 
 const RightSide: React.FC<RightSideProps> = ({
   avatar,
@@ -17,6 +18,7 @@ const RightSide: React.FC<RightSideProps> = ({
   socialLinks,
   tags
 }) => {
+  const navigate = useNavigate()
   const [currentTime, setCurrentTime] = useState(new Date())
 
   // 更新当前时间
@@ -45,9 +47,13 @@ const RightSide: React.FC<RightSideProps> = ({
     }
   }
 
-  const handleTagClick = (tagId: number) => {
-    // navigate(`/tags/${tagId}`);
-    console.log("点击的tag为：", tagId)
+  const handleTagClick = (id: number, name: string, color?: string) => {
+    navigate(`/tag/${id}`, {
+      state: {
+        name: name,
+        color: color
+      }
+    })
   }
 
   return (
@@ -98,7 +104,7 @@ const RightSide: React.FC<RightSideProps> = ({
             <Tag
               key={index}
               color={tag.color}
-              onClick={() => handleTagClick(tag.id)}
+              onClick={() => handleTagClick(tag.id, tag.name)}
               style={{ cursor: "pointer" }}
             >
               {tag.name}

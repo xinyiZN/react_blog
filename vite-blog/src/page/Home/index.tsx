@@ -9,6 +9,7 @@ import { tagApi } from "@/api/TagsApi"
 function Home() {
   const [auth, setAuth] = useState<AuthInfo>()
   const [tags, setTags] = useState<Tag[]>()
+
   useEffect(() => {
     const getAuthInfo = async () => {
       const data = await authApi.getAuthInfo()

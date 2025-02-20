@@ -15,28 +15,18 @@ const Archives: React.FC = () => {
         // setLoading(true)
       } catch (error) {
         console.error("获取归档数据失败:", error)
-      } 
+      }
     }
     fetchArchives()
   }, [])
 
-  const handleArticleClick = (articleId: number) => {
-    console.log("点击的文章ID：", articleId)
-  }
-
   return (
     <ChildrenLayout
-    title="归档"
-    backgroundImage={"/assets/img/background.jpeg"}
-    children={
-      <ArchivesTimeLine
-        articles={articles}
-        onArticleClick={handleArticleClick}
-      />
-    }
-  />
+      title="归档"
+      backgroundImage={"/assets/img/background.jpeg"}
+      children={<ArchivesTimeLine articles={articles} />}
+    />
   )
-
 }
 
 export default Archives

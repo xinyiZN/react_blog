@@ -3,7 +3,7 @@ import { Tag as TagItem } from "@/types"
 import "./index.scss"
 interface TagCloudComponentProps {
   tags: TagItem[]
-  onTagClick: (tagId: number) => void
+  onTagClick: (tagId: number, tagName: string, tagColor?: string) => void
 }
 
 function TagCloudComponent({ tags, onTagClick }: TagCloudComponentProps) {
@@ -21,7 +21,7 @@ function TagCloudComponent({ tags, onTagClick }: TagCloudComponentProps) {
         minSize={12}
         maxSize={35}
         tags={cloudTags}
-        onClick={(tag) => onTagClick(Number(tag.key))}
+        onClick={(tag) => onTagClick(Number(tag.key), tag.value, tag.color)}
         className="cursor-pointer"
       />
     </div>

@@ -37,6 +37,7 @@ func InitRouter() *gin.Engine {
 		apiv1.GET("/auth", api.GetAuthForBlog)
 		//标签接口
 		apiv1.GET("/tags", v1.GetTags)
+		apiv1.GET("/tags/:id", v1.GetArticleByTag)
 		apiv1.POST("/tags", v1.AddTag)
 		apiv1.PUT("/tags/:id", v1.EditTag)
 		apiv1.DELETE("/tags/:id", v1.DeleteTag)
@@ -45,6 +46,8 @@ func InitRouter() *gin.Engine {
 		apiv1.GET("/articles", v1.GetArticles)
 		//获取指定文章
 		apiv1.GET("/articles/:id", v1.GetArticle)
+		//模糊查询文章
+		apiv1.GET("/articles/search", v1.SearchArticle)
 		//新建文章
 		apiv1.POST("/articles", v1.AddArticle)
 		//更新指定文章

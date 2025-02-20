@@ -62,6 +62,13 @@ func GetArticles(pageNum int, pageSize int, maps interface{}) (articles []Articl
 	return
 }
 
+// 模糊查询文章
+func SearchArticle(value string) (article []Article) {
+	// 使用 GORM 的 Where 方法进行模糊查询
+	db.Where("`desc` LIKE ?", "%"+value+"%").Find(&article)
+	return
+}
+
 // 根据文章的id查询对应的文章信息，并且关联查询该文章所属的标签信息
 func GetArticle(id int) (article Article) {
 	db.Where("id=?", id).First(&article)

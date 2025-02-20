@@ -22,5 +22,12 @@ export const tagApi = {
       })
     )
     return simplifiedTags
+  },
+  getArticleByTagId: async (id: number) => {
+    const { data } = await http({
+      method: "GET",
+      url: getUrl(`/tags/${id}`)
+    })
+    return data
   }
 }

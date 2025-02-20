@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -71,4 +73,18 @@ func DeleteTag(id int) bool {
 	db.Where("id = ?", id).Delete(&Tag{})
 
 	return true
+}
+
+func GetArticleByTag(id int) (article []Article) {
+
+	// 将整数 id 转换为字符串
+	idStr := strconv.Itoa(id)
+	tagIDStr := "," + idStr + ","
+	startWithID := idStr + ",%"
+	endWithID := "%," + idStr
+	fmt.Println("tagIDStr:", tagIDStr)
+	// 处理 TagIDs 以单个标签 ID 开头或结尾的情况
+	db.Where("tag_ids LIKE? OR tag_ids LIKE? OR tag_ids LIKE?", tagIDStr, startWithID, endWithID).Find(&article)
+	fmt.Printf("获取到的文章数量: %d\n", len(article))
+	return
 }

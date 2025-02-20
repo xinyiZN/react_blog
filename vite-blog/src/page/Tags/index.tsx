@@ -3,7 +3,6 @@ import { tagApi } from "@/api/TagsApi"
 import { Tag as TagItem } from "@/types"
 import { useNavigate } from "react-router-dom"
 import TagCloudComponent from "./components/TagCloud"
-import "./index.scss"
 import ChildrenLayout from "@/components/ChildrenLayout"
 
 function Tags() {
@@ -26,8 +25,14 @@ function Tags() {
   }, [])
   // 处理标签点击
 
-  const handleTagClick = (tagId: number) => {
-    navigate(`/articles?tag=${tagId}`)
+  const handleTagClick = (id: number, name: string, color?: string) => {
+    console.log("tagid", id, name)
+    navigate(`/tag/${id}`, {
+      state: {
+        name: name,
+        color: color
+      }
+    })
   }
   return (
     <ChildrenLayout
@@ -35,7 +40,7 @@ function Tags() {
       backgroundImage={"/assets/img/background.jpeg"}
       children={<TagCloudComponent tags={tags} onTagClick={handleTagClick} />}
     />
-  ) 
+  )
 }
 
 export default Tags

@@ -1,13 +1,24 @@
-import React from "react"
+import React, { useState } from "react"
 import { NavLink } from "react-router-dom"
 import { UserOutlined, SmileFilled } from "@ant-design/icons"
 import { Input, Dropdown } from "antd"
 import Menus from "./config"
 import "./index.scss"
 import type { MenuProps } from "antd"
-import type { MenuItem } from "@/types"
+import type { MenuItem, ArticleApi } from "@/types"
+import type { GetProps } from "antd"
+import { articlesApi } from "@/api/ArticleApi"
+
+type SearchProps = GetProps<typeof Input.Search>
+
+const { Search } = Input
+
+const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
+  console.log(info?.source, value)
+}
 
 const MyNav: React.FC = () => {
+  const [searchResults, setSearchResults] = useState<ArticleApi[]>([])
   const getDropdownItems = (children: MenuItem[]): MenuProps["items"] => {
     return children.map((child) => ({
       key: child.to ?? "",
@@ -20,7 +31,35 @@ const MyNav: React.FC = () => {
       type: "item" as const
     }))
   }
+  // 防抖函数，避免频繁请求
+  const debounce = <T extends (...args: [string]) => void>(
+    func: T,
+    delay: number
+  ): T => {
+    let timer: NodeJS.Timeout | null = null
+    return ((value: string) => {
+      if (timer) {
+        clearTimeout(timer)
+      }
+      timer = setTimeout(() => {
+        func(value)
+      }, delay)
+    }) as T
+  }
 
+  const handleSearch = debounce(async (value: string) => {
+    if (value) {
+      try {
+        // 发送请求到后端获取数据
+        const response = await articlesApi.searchArticle(value)
+        setSearchResults(response.data)
+      } catch (error) {
+        console.error("搜索出错:", error)
+      }
+    } else {
+      setSearchResults([])
+    }
+  }, 300)
   return (
     <>
       <nav className="nav">
@@ -54,11 +93,21 @@ const MyNav: React.FC = () => {
         </ul>
         <div className="rightBar">
           <div className="searchBar">
-            <Input.Search
+            <Search
               placeholder="搜索文章..."
               allowClear
-              onSearch={(value) => console.log(value)}
+              onSearch={onSearch}
+              style={{ width: 304 }}
+              onChange={(e) => handleSearch(e.target.value)}
             />
+            {searchResults.length > 0 && (
+              <div style={{ marginTop: 16 }}>
+                <h4>搜索结果</h4>
+                {searchResults.map((result) => (
+                  <div key={result.id}>{result.title}</div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="adminSvg">
             {/* 登录到后台-- */}
