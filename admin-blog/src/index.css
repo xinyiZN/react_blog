@@ -1,0 +1,4 @@
+/* global.css */
+@import "tailwindcss";
+@layer theme, base, components;
+@import "tailwindcss/theme" layer(theme);

@@ -1,0 +1,11 @@
+/build/*
+.local
+.output.js
+eslint.config.js
+.editorconfig
+/node_modules/**
+
+**/*.svg
+**/*.sh
+
+/public/*
