@@ -13,9 +13,7 @@ type SearchProps = GetProps<typeof Input.Search>
 
 const { Search } = Input
 
-const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
-  console.log(info?.source, value)
-}
+
 
 const MyNav: React.FC = () => {
   const [searchResults, setSearchResults] = useState<ArticleApi[]>([])
@@ -52,7 +50,7 @@ const MyNav: React.FC = () => {
       try {
         // 发送请求到后端获取数据
         const response = await articlesApi.searchArticle(value)
-        setSearchResults(response.data)
+        setSearchResults(response.data.data)
       } catch (error) {
         console.error("搜索出错:", error)
       }
@@ -60,6 +58,11 @@ const MyNav: React.FC = () => {
       setSearchResults([])
     }
   }, 300)
+
+  const onSearch: SearchProps["onSearch"] = (value, _e, info) => {
+    handleSearch(value)
+    console.log(info?.source, value)
+  }
   return (
     <>
       <nav className="nav">
@@ -101,10 +104,11 @@ const MyNav: React.FC = () => {
               onChange={(e) => handleSearch(e.target.value)}
             />
             {searchResults.length > 0 && (
-              <div style={{ marginTop: 16 }}>
-                <h4>搜索结果</h4>
+              <div className="border bg-white shadow-lg p-4" style={{ zIndex: 10, position: 'absolute', width: 304, border: '1px solid #d9d9d9' }}>
                 {searchResults.map((result) => (
-                  <div key={result.id}>{result.title}</div>
+                  <div key={result.id} className="py-2 hover:bg-gray-100" style={{padding:"3px 5px"}}>
+                     <NavLink to={`/article/${result.id}`} state={{ filepath: result.url?.split("/")[result.url?.split("/").length-1] }}>{result.title}</NavLink> 
+                  </div>
                 ))}
               </div>
             )}
