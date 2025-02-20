@@ -4,11 +4,9 @@ import { useNavigate } from "react-router-dom"
 import "./index.scss"
 interface Props {
   articles?: Article[]
-  name?: string
-  color?: string
 }
 
-function ArchiveTimeLine({ articles, name, color }: Props) {
+function ArchiveTimeLine({ articles }: Props) {
   const navigate = useNavigate()
   // 按年份和月份对文章进行分组
   const groupedArticles = useMemo(() => {
@@ -43,14 +41,7 @@ function ArchiveTimeLine({ articles, name, color }: Props) {
   }
   return (
     <div className="archive-container">
-      <div className="archive-total">
-        {name && (
-          <span className="archive-name" style={{ color: color }}>
-            标签{name}—
-          </span>
-        )}
-        共 {articles?.length} 篇文章
-      </div>
+      <div className="archive-total">共 {articles?.length} 篇文章</div>
 
       <div className="archive-section">
         {Object.entries(groupedArticles)

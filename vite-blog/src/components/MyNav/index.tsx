@@ -13,8 +13,6 @@ type SearchProps = GetProps<typeof Input.Search>
 
 const { Search } = Input
 
-
-
 const MyNav: React.FC = () => {
   const [searchResults, setSearchResults] = useState<ArticleApi[]>([])
   const getDropdownItems = (children: MenuItem[]): MenuProps["items"] => {
@@ -104,10 +102,32 @@ const MyNav: React.FC = () => {
               onChange={(e) => handleSearch(e.target.value)}
             />
             {searchResults.length > 0 && (
-              <div className="border bg-white shadow-lg p-4" style={{ zIndex: 10, position: 'absolute', width: 304, border: '1px solid #d9d9d9' }}>
+              <div
+                className="border bg-white shadow-lg p-4"
+                style={{
+                  zIndex: 10,
+                  position: "absolute",
+                  width: 304,
+                  border: "1px solid #d9d9d9"
+                }}
+              >
                 {searchResults.map((result) => (
-                  <div key={result.id} className="py-2 hover:bg-gray-100" style={{padding:"3px 5px"}}>
-                     <NavLink to={`/article/${result.id}`} state={{ filepath: result.url?.split("/")[result.url?.split("/").length-1] }}>{result.title}</NavLink> 
+                  <div
+                    key={result.id}
+                    className="py-2 hover:bg-gray-100"
+                    style={{ padding: "3px 5px" }}
+                  >
+                    <NavLink
+                      to={`/article/${result.id}`}
+                      state={{
+                        filepath:
+                          result.url?.split("/")[
+                            result.url?.split("/").length - 1
+                          ]
+                      }}
+                    >
+                      {result.title}
+                    </NavLink>
                   </div>
                 ))}
               </div>

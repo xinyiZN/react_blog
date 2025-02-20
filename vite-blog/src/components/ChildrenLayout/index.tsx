@@ -5,12 +5,14 @@ interface ChildrenLayoutProps {
   title: string
   children: React.ReactNode
   backgroundImage?: string
+  name?: string
 }
 
 const ChildrenLayout: React.FC<ChildrenLayoutProps> = ({
   title,
   children,
-  backgroundImage
+  backgroundImage,
+  name
 }) => {
   return (
     <div className="child-container">
@@ -21,7 +23,10 @@ const ChildrenLayout: React.FC<ChildrenLayoutProps> = ({
         }}
       >
         <div className="overlay"></div>
-        <h1>{title}</h1>
+        <h1>
+          {name && <span className="archive-name">{name}—</span>}
+          {title}
+        </h1>
       </div>
       <div className="childContent">{children}</div>
     </div>

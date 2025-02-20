@@ -47,11 +47,10 @@ const RightSide: React.FC<RightSideProps> = ({
     }
   }
 
-  const handleTagClick = (id: number, name: string, color?: string) => {
+  const handleTagClick = (id: number, name: string) => {
     navigate(`/tag/${id}`, {
       state: {
-        name: name,
-        color: color
+        name: name
       }
     })
   }

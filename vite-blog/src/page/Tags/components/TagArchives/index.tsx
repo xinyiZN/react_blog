@@ -8,7 +8,7 @@ import ArchiveTimeLine from "@/components/ArchiveTimeLine"
 function TagArchive() {
   const location = useLocation()
   const { id } = useParams()
-  const { name, color } = location.state || {}
+  const { name } = location.state || {}
   const [length, setLength] = useState()
   const [articles, setArticles] = useState<Article[]>()
   useEffect(() => {
@@ -28,9 +28,10 @@ function TagArchive() {
     <ChildrenLayout
       title="标签归档"
       backgroundImage={"/assets/img/background.jpeg"}
+      name={name}
       children={
         length ? (
-          <ArchiveTimeLine articles={articles} name={name} color={color} />
+          <ArchiveTimeLine articles={articles} />
         ) : (
           <div className="article-detail">
             <p>该标签下没有文章</p>

@@ -25,12 +25,11 @@ function Tags() {
   }, [])
   // 处理标签点击
 
-  const handleTagClick = (id: number, name: string, color?: string) => {
+  const handleTagClick = (id: number, name: string) => {
     console.log("tagid", id, name)
     navigate(`/tag/${id}`, {
       state: {
-        name: name,
-        color: color
+        name: name
       }
     })
   }
