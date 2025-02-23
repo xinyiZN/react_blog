@@ -1,73 +1,52 @@
-import React, { useState } from 'react';
-import {
-  AppstoreOutlined,
-  ContainerOutlined,
-  DesktopOutlined,
-  MailOutlined,
-  MenuFoldOutlined,
+import React, { useEffect, useState } from 'react';
+import Icon, {
   MenuUnfoldOutlined,
-  PieChartOutlined,
+  MenuFoldOutlined ,
 } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Button, Menu } from 'antd';
 
+import { MenuItems } from './config';
+import { Button, Menu } from 'antd';
+import type { MenuProps } from 'antd';
+import { useLocation, useNavigate } from 'react-router-dom';
 type MenuItem = Required<MenuProps>['items'][number];
 
-const items: MenuItem[] = [
-  { key: '1', icon: <PieChartOutlined />, label: 'Option 1' },
-  { key: '2', icon: <DesktopOutlined />, label: 'Option 2' },
-  { key: '3', icon: <ContainerOutlined />, label: 'Option 3' },
-  {
-    key: 'sub1',
-    label: 'Navigation One',
-    icon: <MailOutlined />,
-    children: [
-      { key: '5', label: 'Option 5' },
-      { key: '6', label: 'Option 6' },
-      { key: '7', label: 'Option 7' },
-      { key: '8', label: 'Option 8' },
-    ],
-  },
-  {
-    key: 'sub2',
-    label: 'Navigation Two',
-    icon: <AppstoreOutlined />,
-    children: [
-      { key: '9', label: 'Option 9' },
-      { key: '10', label: 'Option 10' },
-      {
-        key: 'sub3',
-        label: 'Submenu',
-        children: [
-          { key: '11', label: 'Option 11' },
-          { key: '12', label: 'Option 12' },
-        ],
-      },
-    ],
-  },
-];
 
 const MyNav: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [items, setItems] = useState<MenuItem[]>(MenuItems);
+  const navigate = useNavigate()
+  const [headBarCurrent, changeHeadBarCurrent] = useState("")
+  const [clickChange, changeClickChange] = useState("")
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
   };
 
+  useEffect(() => { // 在菜单点击事件发生时
+        if (clickChange) { // 跳转页面
+            navigate(clickChange)
+        }
+    }, [clickChange])
+     
+  const handleMenuClick = (e: any) => {
+  // 当顶部导航栏触发点击的时候 需要更新两个值
+  // 告知菜单选中值发生了变化
+  changeHeadBarCurrent(e.key) 
+  const url = '/' + e.key
+  console.log("url", url)
+  // 告知触发了菜单点击事件 需要跳转页面了
+  changeClickChange(url) 
+}
   return (
-    <div style={{ width: 256 }}>
-      <Button type="primary" onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
-        {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-      </Button>
       <Menu
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
-        mode="inline"
         theme="dark"
+        defaultSelectedKeys={['1']}
+        mode="inline"
         inlineCollapsed={collapsed}
         items={items}
+        onClick={handleMenuClick}
       />
-    </div>
+
   );
 };
 
