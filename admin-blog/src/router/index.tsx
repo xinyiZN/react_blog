@@ -1,40 +1,40 @@
-import AdminLayout from "@/components/AdminLayout";
-import ArticlePage from "@/pages/Article";
-import TagPage from "@/pages/Tag";
-import MsgPage from "@/pages/Msg";
-import { createBrowserRouter } from "react-router-dom";
-import UserPage from "@/pages/Base";
-import MenuPage from "@/pages/Base/Menu";
-import LinkPage from "@/pages/Base/Link";
+import AdminLayout from "@/components/AdminLayout"
+import ArticlePage from "@/pages/Article"
+import TagPage from "@/pages/Tag"
+import MsgPage from "@/pages/Msg"
+import { createBrowserRouter } from "react-router-dom"
+import UserPage from "@/pages/Base"
+import MenuPage from "@/pages/Base/Menu"
+import LinkPage from "@/pages/Base/Link"
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <AdminLayout />,
     children: [
       {
         path: "/article",
-        element:<ArticlePage/>
+        element: <ArticlePage />
       },
       {
         path: "/tag",
-        element:<TagPage/>
+        element: <TagPage />
       },
       {
         path: "/message",
-        element:<MsgPage/>
+        element: <MsgPage />
       },
       {
         path: "/user",
-        element:<UserPage/>
+        element: <UserPage />
       },
       {
-        path: "/link", element: <LinkPage /> 
+        path: "/link",
+        element: <LinkPage />
       },
       {
         path: "/menu",
-        element:<MenuPage/>
+        element: <MenuPage />
       }
     ]
-  },
- 
+  }
 ])
