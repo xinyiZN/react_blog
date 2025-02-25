@@ -3,7 +3,7 @@ import { Button, Flex, Popconfirm, Table, Tag } from "antd"
 
 import type { TableColumnsType, TableProps } from "antd"
 import { useAppDispatch } from "@/redux/hooks"
-import { getAllTags, editTag, deleteTag } from "@/redux/slices/TagSlice"
+import { getAllTags, deleteTag } from "@/redux/slices/TagSlice"
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"]
@@ -19,17 +19,21 @@ interface DataType {
 const TagPage: React.FC = () => {
   const columns: TableColumnsType<DataType> = [
     {
-      title: "名称", dataIndex: "name",
-      render: (text, record) => (
-        <Tag color={record.color}>{text}</Tag>
-      )
-     },
+      title: "名称",
+      dataIndex: "name",
+      render: (text, record) => <Tag color={record.color}>{text}</Tag>
+    },
     {
-      title: "状态", dataIndex: "state", 
+      title: "状态",
+      dataIndex: "state",
       render: (_, record) => (
-        <Popconfirm title={record.state ? "确认关闭使用吗？" : "确认开启使用吗？"} onConfirm={() => handleState(record.id)}>
+        <Popconfirm
+          title={record.state ? "确认关闭使用吗？" : "确认开启使用吗？"}
+          onConfirm={() => handleState(record.id)}
+        >
           <a>{record.state ? "正在使用" : "禁用中"}</a>
-      </Popconfirm>)
+        </Popconfirm>
+      )
     },
     { title: "创建人", dataIndex: "created_by" },
     {
@@ -37,18 +41,18 @@ const TagPage: React.FC = () => {
       dataIndex: "operation",
       render: (_, record) => (
         <Flex gap="small" wrap>
-          <Button 
-            value="small" 
-            color="primary" 
-            variant="outlined" 
+          <Button
+            value="small"
+            color="primary"
+            variant="outlined"
             onClick={() => handleEdit(record.id)}
           >
             修改
           </Button>
-          <Button 
-            value="small" 
-            color="danger" 
-            variant="outlined" 
+          <Button
+            value="small"
+            color="danger"
+            variant="outlined"
             onClick={() => handleDelete(record.id)}
           >
             删除
@@ -58,7 +62,7 @@ const TagPage: React.FC = () => {
     }
   ]
   const dispatch = useAppDispatch()
-  const [tagSource,setTagSource]=useState<DataType[]>()
+  const [tagSource, setTagSource] = useState<DataType[]>()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -66,7 +70,7 @@ const TagPage: React.FC = () => {
   useEffect(() => {
     const getTagSource = async () => {
       const data = await dispatch(getAllTags())
-      console.log("data.payload:",data.payload.lists)
+      console.log("data.payload:", data.payload.lists)
       // 处理获取到的数据，例如更新状态
       setTagSource(data.payload.lists)
     }
@@ -94,31 +98,30 @@ const TagPage: React.FC = () => {
 
   const hasSelected = selectedRowKeys.length > 0
 
-
   const handleState = (id: number) => {
     //若当前标签有文章使用则不可以关闭
     console.log("id:", id)
     // const newData = tagSource?.filter((item) => item.id !== id);
     // setDataSource(newData);
-  };
+  }
 
   const handleEdit = async (id: number) => {
-    console.log("Editing tag with id:", id);
+    console.log("Editing tag with id:", id)
     // 添加异步 dispatch 操作
     // await dispatch(editTag(id)); // 假设 editTag 是你定义的异步操作
     // 处理编辑后的逻辑，例如重新获取标签数据
     // const data = await dispatch(getAllTags());
     // setTagSource(data.payload.lists);
-  };
+  }
 
   const handleDelete = async (id: number) => {
-    console.log("Deleting tag with id:", id);
+    console.log("Deleting tag with id:", id)
     // 添加异步 dispatch 操作
-    await dispatch(deleteTag(id));
+    await dispatch(deleteTag(id))
     // 处理删除后的逻辑，例如重新获取标签数据
-    const data = await dispatch(getAllTags());
-    setTagSource(data.payload.lists);
-  };
+    const data = await dispatch(getAllTags())
+    setTagSource(data.payload.lists)
+  }
 
   return (
     <Flex gap="middle" vertical>

@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 
-import type { MenuProps } from "antd"
-import { Breadcrumb, Layout, Menu, theme } from "antd"
+import { Breadcrumb, Layout, theme } from "antd"
 import MyNav from "../MyNav"
 import { Outlet } from "react-router-dom"
 import { useAppSelector } from "@/redux/hooks"
 
 const { Header, Content, Footer, Sider } = Layout
 
-type MenuItem = Required<MenuProps>["items"][number]
-
 const AdminLayout: React.FC = () => {
   const menus = useAppSelector((state) => state.menus)
-
-  // useEffect(() => {
-  //   // 当 currentMenu 更新时执行某些操作
-  //   console.log("当前-layout-菜单:", menu);
-  // }, [menu]);
 
   const [collapsed, setCollapsed] = useState(false)
   const {

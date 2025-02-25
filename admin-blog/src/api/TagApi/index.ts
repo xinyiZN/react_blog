@@ -15,7 +15,15 @@ const TagApi = {
     })
     return res
   },
-  addTag: async ({ name, state, createdBy }: { name: string; state: number; createdBy: string; }) => {
+  addTag: async ({
+    name,
+    state,
+    createdBy
+  }: {
+    name: string
+    state: number
+    createdBy: string
+  }) => {
     const res = await http({
       method: "POST",
       url: "/tags",
@@ -26,7 +34,7 @@ const TagApi = {
   deleteTag: async (id: number) => {
     const res = await http({
       method: "DELETE",
-      url: `/tags/${id}`,
+      url: `/tags/${id}`
     })
     return res
   }

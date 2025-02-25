@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { MenuItems } from "./config"
-import { Button, Menu } from "antd"
+import { Menu } from "antd"
 import type { MenuProps } from "antd"
-import { useLocation, useNavigate } from "react-router-dom"
-import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { useNavigate } from "react-router-dom"
+import { useAppDispatch } from "@/redux/hooks"
 import { setCurrentMenu, setParentMenu } from "@/redux/slices/MenuSlice"
 
 type MenuItem = Required<MenuProps>["items"][number] & {

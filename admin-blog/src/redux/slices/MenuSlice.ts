@@ -1,10 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit"
 
 const menuSlice = createSlice({
-  name: 'menu',
+  name: "menu",
   initialState: {
-    currentMenu: '', // 记录当前菜单名称
-    parentMenu: '',  // 记录父级菜单名称
+    currentMenu: "", // 记录当前菜单名称
+    parentMenu: "" // 记录父级菜单名称
   },
   reducers: {
     setCurrentMenu(state, action) {
@@ -18,8 +18,8 @@ const menuSlice = createSlice({
       console.log("menuslice-p:", state.parentMenu)
     }
   }
-});
+})
 
 // 导出 actions 和 reducer
-export const { setCurrentMenu, setParentMenu } = menuSlice.actions;
-export default menuSlice.reducer;
+export const { setCurrentMenu, setParentMenu } = menuSlice.actions
+export default menuSlice.reducer
