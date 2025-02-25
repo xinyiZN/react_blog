@@ -71,12 +71,10 @@ func EditTag(id int, data interface{}) bool {
 }
 func DeleteTag(id int) bool {
 	db.Where("id = ?", id).Delete(&Tag{})
-
 	return true
 }
 
 func GetArticleByTag(id int) (article []Article) {
-
 	// 将整数 id 转换为字符串
 	idStr := strconv.Itoa(id)
 	tagIDStr := "," + idStr + ","

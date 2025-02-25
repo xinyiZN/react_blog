@@ -1,7 +1,9 @@
-import React, { useState } from "react"
-import { Button, Flex, Table } from "antd"
+import React, { useEffect, useState } from "react"
+import { Button, Flex, Popconfirm, Table, Tag } from "antd"
 
 import type { TableColumnsType, TableProps } from "antd"
+import { useAppDispatch } from "@/redux/hooks"
+import { getAllTags, editTag, deleteTag } from "@/redux/slices/TagSlice"
 
 type TableRowSelection<T extends object = object> =
   TableProps<T>["rowSelection"]
@@ -11,43 +13,65 @@ interface DataType {
   name: string
   color: string
   state: string
-  createdBy: string
+  created_by: string
 }
 
-const columns: TableColumnsType<DataType> = [
-  { title: "名称", dataIndex: "name" },
-  { title: "颜色", dataIndex: "color" },
-  { title: "状态", dataIndex: "state" },
-  { title: "创建人", dataIndex: "createdBy" },
-  {
-    title: "操作",
-    dataIndex: "operation",
-    render: () => (
-      <Flex gap="small" wrap>
-        <Button value="small" color="primary" variant="outlined">
-          修改
-        </Button>
-        <Button value="small" color="danger" variant="outlined">
-          删除
-        </Button>
-      </Flex>
-    )
-  }
-]
-
-const dataSource = Array.from<DataType>({ length: 46 }).map<DataType>(
-  (_, i) => ({
-    id: i,
-    name: `Edward King ${i}`,
-    color: "orange",
-    state: "禁用",
-    createdBy: "我"
-  })
-)
-
 const TagPage: React.FC = () => {
+  const columns: TableColumnsType<DataType> = [
+    {
+      title: "名称", dataIndex: "name",
+      render: (text, record) => (
+        <Tag color={record.color}>{text}</Tag>
+      )
+     },
+    {
+      title: "状态", dataIndex: "state", 
+      render: (_, record) => (
+        <Popconfirm title={record.state ? "确认关闭使用吗？" : "确认开启使用吗？"} onConfirm={() => handleState(record.id)}>
+          <a>{record.state ? "正在使用" : "禁用中"}</a>
+      </Popconfirm>)
+    },
+    { title: "创建人", dataIndex: "created_by" },
+    {
+      title: "操作",
+      dataIndex: "operation",
+      render: (_, record) => (
+        <Flex gap="small" wrap>
+          <Button 
+            value="small" 
+            color="primary" 
+            variant="outlined" 
+            onClick={() => handleEdit(record.id)}
+          >
+            修改
+          </Button>
+          <Button 
+            value="small" 
+            color="danger" 
+            variant="outlined" 
+            onClick={() => handleDelete(record.id)}
+          >
+            删除
+          </Button>
+        </Flex>
+      )
+    }
+  ]
+  const dispatch = useAppDispatch()
+  const [tagSource,setTagSource]=useState<DataType[]>()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [loading, setLoading] = useState(false)
+
+  //表格数据
+  useEffect(() => {
+    const getTagSource = async () => {
+      const data = await dispatch(getAllTags())
+      console.log("data.payload:",data.payload.lists)
+      // 处理获取到的数据，例如更新状态
+      setTagSource(data.payload.lists)
+    }
+    getTagSource()
+  }, [dispatch])
 
   const start = () => {
     setLoading(true)
@@ -70,6 +94,32 @@ const TagPage: React.FC = () => {
 
   const hasSelected = selectedRowKeys.length > 0
 
+
+  const handleState = (id: number) => {
+    //若当前标签有文章使用则不可以关闭
+    console.log("id:", id)
+    // const newData = tagSource?.filter((item) => item.id !== id);
+    // setDataSource(newData);
+  };
+
+  const handleEdit = async (id: number) => {
+    console.log("Editing tag with id:", id);
+    // 添加异步 dispatch 操作
+    // await dispatch(editTag(id)); // 假设 editTag 是你定义的异步操作
+    // 处理编辑后的逻辑，例如重新获取标签数据
+    // const data = await dispatch(getAllTags());
+    // setTagSource(data.payload.lists);
+  };
+
+  const handleDelete = async (id: number) => {
+    console.log("Deleting tag with id:", id);
+    // 添加异步 dispatch 操作
+    await dispatch(deleteTag(id));
+    // 处理删除后的逻辑，例如重新获取标签数据
+    const data = await dispatch(getAllTags());
+    setTagSource(data.payload.lists);
+  };
+
   return (
     <Flex gap="middle" vertical>
       <Flex align="center" gap="middle">
@@ -86,7 +136,7 @@ const TagPage: React.FC = () => {
       <Table<DataType>
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={dataSource}
+        dataSource={tagSource}
       />
     </Flex>
   )

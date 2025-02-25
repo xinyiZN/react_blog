@@ -120,8 +120,15 @@ func DeleteTag(c *gin.Context) {
 	code := e.INVALID_PARAMS
 	if !valid.HasErrors() {
 		code = e.SUCCESS
+		//判断此id下是否有文章
+		var articleData = models.GetArticleByTag(id)
+		fmt.Println("articleDta:", len(articleData))
 		if models.ExistTagByID(id) {
-			models.DeleteTag(id)
+			if len(articleData) == 0 {
+				models.DeleteTag(id)
+			} else {
+				code = e.ERROR_TAG_HAS_ARTICLES // 新增错误码，表示标签下有文章
+			}
 		} else {
 			code = e.ERROR_NOT_EXIST_TAG
 		}
