@@ -8,47 +8,65 @@ interface tagSliceState {
   id: number
   name: string
   color: string
-  state: number
-  createdBy: string
+  state?: number
+  created_by: string
 }
-const initialState = [] as tagSliceState[]
+const initialState: tagSliceState[] = []
 
 // 定义异步操作
 export const getAllTags = createAsyncThunk("tags/getAllTags", async () => {
   const res = await TagApi.getAllTags()
-  console.log("获取的所有标签：", res.data.data)
-  return res.data.data
+  return res.data.data.lists
 })
 
+//添加标签
 export const addTag = createAsyncThunk(
   "tags/addTag",
   async (newTag: tagSliceState) => {
-    const response = await axios.post("/api/tags", newTag)
-    return response.data
+    const res = await TagApi.addTag(newTag)
+    if (res.data.code === 200) {
+      notification.success({
+        message: "提示",
+        description: "添加成功"
+      })
+    }
+    return res.data.data
   }
 )
 
+//修改标签信息
 export const editTag = createAsyncThunk(
   "tags/editTag",
   async (editTag: tagSliceState) => {
-    const response = await axios.put(`/api/tags/${editTag.id}`, editTag)
-    return response.data
+    const res = await TagApi.updateTag(editTag)
+    if (!res.data.data.length) {
+      notification.error({
+        message: "错误",
+        description: "已有文章使用，该标签不可以修改"
+      })
+      throw new Error("当前数据不可以删除")
+    }
+    return res.data.data.lists
   }
 )
 
+//删除标签
 export const deleteTag = createAsyncThunk(
   "tags/deleteTag",
   async (id: number) => {
     const res = await TagApi.deleteTag(id)
-    console.log("res.data:删除：", res.data.data)
-    if (!res.data.data.length) {
+    if (res.data.code === 10004) {
       notification.error({
         message: "错误",
         description: "已有文章使用，该标签不可以删除"
       })
       throw new Error("当前数据不可以删除")
     }
-    return res.data.data
+    notification.success({
+      message: "提示",
+      description: "删除成功"
+    })
+    return id
   }
 )
 
@@ -65,7 +83,8 @@ const tagSlice = createSlice({
         return action.payload
       })
       .addCase(addTag.fulfilled, (state, action) => {
-        state.push(action.payload)
+        const { id, name, color, state: tagState, created_by } = action.payload;
+        state.push({ id, name, color, state: tagState, created_by });
       })
       .addCase(editTag.fulfilled, (state, action) => {
         const index = state.findIndex((tag) => tag.id === action.payload.id)
@@ -74,9 +93,7 @@ const tagSlice = createSlice({
         }
       })
       .addCase(deleteTag.fulfilled, (state, action) => {
-        console.log("删除方法:--state", state)
-        console.log("删除方法:--action", action.payload)
-        return state.filter((tag) => tag.id !== action.payload)
+        return initialState.filter((tag) => tag.id !== action.payload)
       })
   }
 })

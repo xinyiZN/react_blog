@@ -27,7 +27,6 @@ func GetAuth(maps interface{}) (Auth, error) {
 	if err != nil {
 		return auth, err
 	}
-
 	// 解析SocailIDs字符串为切片
 	if auth.SocailIDs != "" {
 		socialIDs := strings.Split(auth.SocailIDs, ",")
@@ -41,4 +40,13 @@ func GetAuth(maps interface{}) (Auth, error) {
 	}
 
 	return auth, nil
+}
+
+func GetAllAuth() ([]Auth, error) {
+	var auths []Auth
+	err := db.Find(&auths).Error
+	if err != nil {
+		return nil, err
+	}
+	return auths, nil
 }

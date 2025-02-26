@@ -53,7 +53,7 @@ func GetAuth(c *gin.Context) {
 	})
 }
 
-// 只读取用户信息————博客只有一个用户
+// 只读取用户信息————假设博客只有一个用户
 func GetAuthForBlog(c *gin.Context) {
 	auth, err := models.GetAuth(map[string]interface{}{})
 	if err != nil {

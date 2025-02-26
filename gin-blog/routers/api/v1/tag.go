@@ -42,11 +42,20 @@ func GetTags(c *gin.Context) {
 	})
 }
 
+// 标签下是否有文章
+func hasTagArticle(id int) int {
+	//判断此id下是否有文章
+	var articleData = models.GetArticleByTag(id)
+	fmt.Println("articleTAG:", len(articleData))
+	return len(articleData)
+}
+
 // 新增文章标签
 func AddTag(c *gin.Context) {
 	name := c.PostForm("name")
 	state := com.StrTo(c.DefaultPostForm("state", "0")).MustInt()
 	createdBy := c.PostForm("created_by")
+	color := c.PostForm("color")
 	valid := validation.Validation{}
 	valid.Required(name, "name").Message("名称不能为空")
 	valid.MaxSize(name, 100, "name").Message("名称最长为100字符")
@@ -54,10 +63,11 @@ func AddTag(c *gin.Context) {
 	valid.MaxSize(createdBy, 100, "created_by").Message("创建人最长为100字符")
 	valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
 	code := e.INVALID_PARAMS
+	var tag interface{}
 	if !valid.HasErrors() {
 		if !models.ExistTagByName(name) {
 			code = e.SUCCESS
-			models.AddTag(name, state, createdBy)
+			tag, _ = models.AddTag(name, state, createdBy, color)
 		} else {
 			code = e.ERROR_EXIST_TAG
 		}
@@ -66,7 +76,7 @@ func AddTag(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.GetMsg(code),
-		"data": make(map[string]string),
+		"data": tag,
 	})
 }
 
@@ -75,30 +85,35 @@ func EditTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
 	name := c.Query("name")
 	valid := validation.Validation{}
-	modifiedBy := c.Query("modified_by")
+	// modifiedBy := c.Query("modified_by")
 	var state int = -1
 	if arg := c.Query("state"); arg != "" {
 		state = com.StrTo(arg).MustInt()
 		valid.Range(state, 0, 1, "state").Message("状态只允许0或1")
 	}
 	valid.Required(id, "id").Message("ID不能为空")
-	valid.Required(modifiedBy, "modified_by").Message("修改人不能为空")
-	valid.MaxSize(modifiedBy, 100, "modified_by").Message("修改人最长为100字符")
+	// valid.Required(modifiedBy, "modified_by").Message("修改人不能为空")
+	// valid.MaxSize(modifiedBy, 100, "modified_by").Message("修改人最长为100字符")
 	valid.MaxSize(name, 100, "name").Message("名称最长为100字符")
 
 	code := e.INVALID_PARAMS
 	if !valid.HasErrors() {
 		code = e.SUCCESS
 		if models.ExistTagByID(id) {
-			data := make(map[string]interface{})
-			data["modified_by"] = modifiedBy
-			if name != "" {
-				data["name"] = name
+			//没有文章使用标签才可以修改
+			if hasTagArticle(id) == 0 {
+				data := make(map[string]interface{})
+				// data["modified_by"] = modifiedBy
+				if name != "" {
+					data["name"] = name
+				}
+				if state != -1 {
+					data["state"] = state
+				}
+				models.EditTag(id, data)
+			} else {
+				code = e.ERROR_TAG_HAS_ARTICLES
 			}
-			if state != -1 {
-				data["state"] = state
-			}
-			models.EditTag(id, data)
 		} else {
 			code = e.ERROR_NOT_EXIST_TAG
 		}
@@ -113,27 +128,16 @@ func EditTag(c *gin.Context) {
 // 删除文章标签
 func DeleteTag(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
-
-	valid := validation.Validation{}
-	valid.Min(id, 1, "id").Message("ID必须大于0")
-
 	code := e.INVALID_PARAMS
-	if !valid.HasErrors() {
-		code = e.SUCCESS
-		//判断此id下是否有文章
-		var articleData = models.GetArticleByTag(id)
-		fmt.Println("articleDta:", len(articleData))
-		if models.ExistTagByID(id) {
-			if len(articleData) == 0 {
-				models.DeleteTag(id)
-			} else {
-				code = e.ERROR_TAG_HAS_ARTICLES // 新增错误码，表示标签下有文章
-			}
+	if models.ExistTagByID(id) {
+		if hasTagArticle(id) == 0 {
+			models.DeleteTag(id)
 		} else {
-			code = e.ERROR_NOT_EXIST_TAG
+			code = e.ERROR_TAG_HAS_ARTICLES // 新增错误码，表示标签下有文章
 		}
+	} else {
+		code = e.ERROR_NOT_EXIST_TAG
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
 		"msg":  e.GetMsg(code),

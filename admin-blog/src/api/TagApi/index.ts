@@ -1,4 +1,13 @@
 import http from "@/utils/http"
+import qs from "qs";
+
+interface tagState {
+  id: number
+  name: string
+  color: string
+  state?: number
+  created_by: string
+}
 
 const TagApi = {
   getAllTags: async () => {
@@ -8,26 +17,23 @@ const TagApi = {
     })
     return res
   },
-  updateTag: async (id: number) => {
+  updateTag: async (tags: tagState) => {
+    const { id, ...rest } = tags;
     const res = http({
       method: "PUT",
-      url: `/tags/${id}`
+      url: `/tags/${id}`,
+      params: { ...rest }
     })
     return res
   },
-  addTag: async ({
-    name,
-    state,
-    createdBy
-  }: {
-    name: string
-    state: number
-    createdBy: string
-  }) => {
+  addTag: async (tags: tagState) => {
     const res = await http({
       method: "POST",
       url: "/tags",
-      data: { name, state, createdBy }
+      data: qs.stringify(tags),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     })
     return res
   },

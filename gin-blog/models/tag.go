@@ -37,13 +37,15 @@ func ExistTagByName(name string) bool {
 	return tag.ID > 0
 }
 
-func AddTag(name string, state int, createdBy string) bool {
-	db.Create(&Tag{
+func AddTag(name string, state int, createdBy string, color string) (Tag, bool) {
+	tag := Tag{
 		Name:      name,
 		State:     state,
 		CreatedBy: createdBy,
-	})
-	return true
+		Color:     color,
+	}
+	db.Create(&tag)
+	return tag, true
 }
 
 // BeforeCreate 方法会在创建数据库记录之前被调用，用于自动设置 CreateOn 字段的值为当前时间的 Unix 时间戳；
@@ -66,9 +68,9 @@ func ExistTagByID(id int) bool {
 
 func EditTag(id int, data interface{}) bool {
 	db.Model(&Tag{}).Where("id = ?", id).Updates(data)
-
 	return true
 }
+
 func DeleteTag(id int) bool {
 	db.Where("id = ?", id).Delete(&Tag{})
 	return true

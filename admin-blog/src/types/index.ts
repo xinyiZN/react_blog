@@ -5,11 +5,17 @@ interface MenuItem {
   children?: MenuItem[]
 }
 
-
+interface tagFrom {
+  id: number
+  name: string
+  color: string
+  state?: number
+  created_by: string
+}
 
 
 export type {
   MenuItem,
-
+  tagFrom
 }
 

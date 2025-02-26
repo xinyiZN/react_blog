@@ -4,19 +4,21 @@ import { Button, Flex, Popconfirm, Table, Tag } from "antd"
 import type { TableColumnsType, TableProps } from "antd"
 import { useAppDispatch } from "@/redux/hooks"
 import { getAllTags, deleteTag } from "@/redux/slices/TagSlice"
+import EditTagModal from "./components"
 
-type TableRowSelection<T extends object = object> =
-  TableProps<T>["rowSelection"]
+type TableRowSelection<T extends object = object> = TableProps<T>['rowSelection'];
 
 interface DataType {
-  id: number
+  key: React.Key
+  id:number
   name: string
   color: string
-  state: string
+  state: number
   created_by: string
 }
 
 const TagPage: React.FC = () => {
+  
   const columns: TableColumnsType<DataType> = [
     {
       title: "名称",
@@ -27,12 +29,7 @@ const TagPage: React.FC = () => {
       title: "状态",
       dataIndex: "state",
       render: (_, record) => (
-        <Popconfirm
-          title={record.state ? "确认关闭使用吗？" : "确认开启使用吗？"}
-          onConfirm={() => handleState(record.id)}
-        >
-          <a>{record.state ? "正在使用" : "禁用中"}</a>
-        </Popconfirm>
+          <p>{record.state ? "正在使用" : "禁用中"}</p>
       )
     },
     { title: "创建人", dataIndex: "created_by" },
@@ -45,7 +42,7 @@ const TagPage: React.FC = () => {
             value="small"
             color="primary"
             variant="outlined"
-            onClick={() => handleEdit(record.id)}
+            onClick={() => handleModalTag("edit",record.id,record.name,record.color,record.created_by,record.state)}
           >
             修改
           </Button>
@@ -63,78 +60,109 @@ const TagPage: React.FC = () => {
   ]
   const dispatch = useAppDispatch()
   const [tagSource, setTagSource] = useState<DataType[]>()
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [loading, setLoading] = useState(false)
+ // 表格数据
+ useEffect(() => {
+  const getTagSource = async () => {
+    const data = await dispatch(getAllTags());
+    setTagSource(data.payload.map((item: DataType) => ({
+      ...item
+    })));
+  };
+  getTagSource();
+}, [dispatch]);
 
-  //表格数据
-  useEffect(() => {
-    const getTagSource = async () => {
-      const data = await dispatch(getAllTags())
-      console.log("data.payload:", data.payload.lists)
-      // 处理获取到的数据，例如更新状态
-      setTagSource(data.payload.lists)
-    }
-    getTagSource()
-  }, [dispatch])
+
 
   const start = () => {
-    setLoading(true)
-    // ajax request after empty completing
+    setLoading(true);
     setTimeout(() => {
-      setSelectedRowKeys([])
-      setLoading(false)
-    }, 1000)
-  }
+      setSelectedRowKeys([]);
+      setLoading(false);
+    }, 1000);
+  };
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    console.log("selectedRowKeys changed: ", newSelectedRowKeys)
-    setSelectedRowKeys(newSelectedRowKeys)
-  }
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
 
   const rowSelection: TableRowSelection<DataType> = {
     selectedRowKeys,
     onChange: onSelectChange
   }
+  
 
   const hasSelected = selectedRowKeys.length > 0
+ 
 
-  const handleState = (id: number) => {
-    //若当前标签有文章使用则不可以关闭
-    console.log("id:", id)
-    // const newData = tagSource?.filter((item) => item.id !== id);
-    // setDataSource(newData);
+  //模态框控制
+  //模态框标题
+  const [title,setTitle]=useState<string>("")
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentTag, setCurrentTag] = useState<{ id: number; name: string; color: string;
+    created_by: string;state:number}|null>(null)
+  //模态关闭操作
+  const handleModalClose = async() => {
+    setIsModalOpen(false)
+    setCurrentTag(null) // 清空当前标签
   }
-
-  const handleEdit = async (id: number) => {
-    console.log("Editing tag with id:", id)
-    // 添加异步 dispatch 操作
-    // await dispatch(editTag(id)); // 假设 editTag 是你定义的异步操作
-    // 处理编辑后的逻辑，例如重新获取标签数据
-    // const data = await dispatch(getAllTags());
-    // setTagSource(data.payload.lists);
+  const handleModalTag = (type: "edit" | "add", id?: number, name?: string, color?: string,
+    created_by?: string,state?:number) => {
+    console.log("编辑下",id,name,color,created_by)
+    if (type === "edit") {
+      if (id === undefined || name === undefined || color === undefined || created_by===undefined ||state===undefined ) {
+        throw new Error("编辑模式下，id、name 、color、created_by 是必需的");
+      }
+      setTitle("修改标签");
+      setCurrentTag({ id, name, color,created_by,state });
+    } else {
+      setTitle("新增标签");
+    }
+    setIsModalOpen(true);
   }
 
   const handleDelete = async (id: number) => {
     console.log("Deleting tag with id:", id)
     // 添加异步 dispatch 操作
     await dispatch(deleteTag(id))
-    // 处理删除后的逻辑，例如重新获取标签数据
+    // 处理删除后重新获取标签数据
     const data = await dispatch(getAllTags())
-    setTagSource(data.payload.lists)
+    setTagSource(data.payload.map((item: { id: number; name: string; color: string; state: number; created_by: string }) => ({
+      key: item.id, // 添加 key 属性
+      id: item.id,
+      name: item.name,
+      color: item.color,
+      state: item.state === 1 ? "正在使用" : "禁用中", // 根据 state 转换为字符串
+      created_by: item.created_by
+    })))
   }
 
+  const handleDataUpdate = async () => {
+    const data = await dispatch(getAllTags());
+    setTagSource(data.payload.map((item: DataType) => ({
+      ...item
+    })));
+  };
+
   return (
+    <>
     <Flex gap="middle" vertical>
       <Flex align="center" gap="middle">
         <Button
           type="primary"
-          onClick={start}
-          disabled={!hasSelected}
-          loading={loading}
+          onClick={() => handleModalTag("add")} // 打开新增标签模态框
         >
-          Reload
+          新增标签
         </Button>
-        {hasSelected ? `Selected ${selectedRowKeys.length} items` : null}
+        <Button
+            color="danger"
+            onClick={start}
+            disabled={!hasSelected} loading={loading}
+        >
+          一键删除
+          </Button>
       </Flex>
       <Table<DataType>
         rowSelection={rowSelection}
@@ -142,6 +170,15 @@ const TagPage: React.FC = () => {
         dataSource={tagSource}
       />
     </Flex>
+      <EditTagModal 
+        title={title}
+        isModalOpen={isModalOpen} 
+        onCloseModal={handleModalClose}
+        tag={currentTag}
+        onSuccess={handleDataUpdate}
+    />
+    </>
+
   )
 }
 
