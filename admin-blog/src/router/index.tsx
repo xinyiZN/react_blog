@@ -6,11 +6,16 @@ import { createBrowserRouter } from "react-router-dom"
 import UserPage from "@/pages/Base"
 import MenuPage from "@/pages/Base/Menu"
 import LinkPage from "@/pages/Base/Link"
+import HomePage from "@/pages/Home"
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <AdminLayout />,
     children: [
+      {
+        index: true,
+        element: <HomePage />
+      },
       {
         path: "/article",
         element: <ArticlePage />
