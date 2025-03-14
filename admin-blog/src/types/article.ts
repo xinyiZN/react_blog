@@ -23,7 +23,7 @@ interface Category {
 }
 
 // 列表项类型
-interface ListItem {
+interface ArticleItem {
   id: number;
   created_on: number;
   modified_on: number;
@@ -42,7 +42,7 @@ interface ListItem {
 
 // 数据类型
 interface ResponseData {
-  lists: ListItem[];
+  lists: ArticleItem[];
   total: number;
 }
 
@@ -51,6 +51,6 @@ interface ResponseData {
 export type {
   TagType,
   Category,
-  ListItem,
+  ArticleItem,
   ResponseData,
 }
