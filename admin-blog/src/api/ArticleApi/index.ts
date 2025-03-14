@@ -3,7 +3,7 @@ import qs from "qs";
 import type {
   TagType,
   Category,
-  ListItem,
+  ArticleItem,
   ResponseData,
 } from "@/types/article"
 
@@ -37,13 +37,13 @@ const ArticleApi = {
   //   })
   //   return res
   // },
-  // deleteArticle: async (id: number) => {
-  //   const res = await http({
-  //     method: "DELETE",
-  //     url: `/articles/${id}`
-  //   })
-  //   return res
-  // }
+  deleteArticleById: async (id: number) => {
+    const res = await http({
+      method: "DELETE",
+      url: `/articles/${id}`
+    })
+    return res
+  }
 }
 
 export { ArticleApi }

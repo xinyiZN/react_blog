@@ -79,6 +79,7 @@ const EditArticleModal: React.FC<Props> = ({ title, isModalOpen, article, onClos
     name: 'file',
     multiple: false,
     action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    fileList: [],
     onChange(info: any) {
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
@@ -114,6 +115,8 @@ const EditArticleModal: React.FC<Props> = ({ title, isModalOpen, article, onClos
           initialValues={{
             title: article?.title,
             id: article?.id,
+            desc: article?.desc,
+            category:article?.category.name,
             created_by: article?.created_by,
             state:article?.state
           }}
@@ -127,9 +130,9 @@ const EditArticleModal: React.FC<Props> = ({ title, isModalOpen, article, onClos
             <Input/>
           </Form.Item>
           <Form.Item<FieldType>
-            label="文章介绍"
+            label="文章概述"
             name="desc"
-            rules={[{ required: true, message: "文章介绍不能为空" }]}
+            rules={[{ required: true, message: "文章概述不能为空" }]}
           >
             <Input/>
           </Form.Item>

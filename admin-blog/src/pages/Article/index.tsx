@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, Table, Tag } from 'antd';
+import { Button, Flex, Table, Tag, Popconfirm ,notification } from 'antd';
 import type { TableColumnsType, TableProps } from 'antd';
 import type { TagType ,
   Category,
   ArticleItem,} from "@/types/article"
 import { useAppDispatch } from '@/redux/hooks';
-import { fetchArticles } from '@/redux/slices/ArticleSlice';
+import { deleteArticle, fetchArticles } from '@/redux/slices/ArticleSlice';
 import { Link } from 'react-router-dom';
 import EditArticleModal from './components';
 
@@ -68,14 +68,9 @@ const ArticlePage: React.FC = () => {
           >
             修改
           </Button>
-          <Button
-            value="small"
-            color="danger"
-            variant="outlined"
-            onClick={() => handleModalArticle(record,"delete")}
-          >
-            删除
-          </Button>
+          <Popconfirm title="确定要删除吗？" onConfirm={() => handleModalArticle(record,"delete")}>
+            <Button  value="small" color="danger" variant="outlined">删除</Button>
+          </Popconfirm>
         </Flex>
       )
       
@@ -110,12 +105,25 @@ const ArticlePage: React.FC = () => {
   const handleModalArticle = (record: DataType,type:string) => {
     console.log("行数据：", record);
     // 打开模态框的逻辑
-    if (type = "edit") {
+    if (type == "edit") {
       setIsModalOpen(true)
       setTitle("修改文章")
       setCurrentArticle(record)
     } else {
-      console.log("删除文章")
+      //根据当前行数据的状态判断是否可以进行删除
+      //state为1不可以删除，说明正在使用此文章
+      if (record.state == 1) {
+        notification.error({
+          message: "提示",
+          description: "文章在使用，不可以删除！"
+        })
+      } else {
+        console.log("删除文章")
+        dispatch(deleteArticle(record.id)).then(() => {
+          handleDataUpdate(); // 删除后刷新数据
+        });
+     
+      }
     }
   }
 

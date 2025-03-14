@@ -1,18 +1,17 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import type {
   TagType,
   Category,
-  ListItem,
+  ArticleItem,
 } from "@/types/article"
 import { ArticleApi } from '@/api/ArticleApi';
-import { error } from 'console';
+import { notification } from 'antd';
 
 // 定义初始状态
 const initialState = {
-  articles: [] as ListItem[],
+  articles: [] as ArticleItem[],
   error: ""
 }
 
@@ -30,9 +29,16 @@ export const addArticle = createAsyncThunk('articles/addArticle', async (newArti
 });
 
 // 异步删除文章
-export const deleteArticle = createAsyncThunk('articles/deleteArticle', async (id) => {
-  await axios.delete(`/ api / articles / ${id} `);
-  return id; // 返回删除的文章ID
+export const deleteArticle = createAsyncThunk('articles/deleteArticle', async (id: number) => {
+  const res = await ArticleApi.deleteArticleById(id)
+  console.log("删除文章：", res.data.data)
+  if (res.data.code == 200) {
+    notification.success({
+      message: "提示",
+      description: "文章删除成功"
+    })
+  }
+  return id;
 });
 
 // 异步更新文章
@@ -48,7 +54,9 @@ const articleSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchArticles.fulfilled, (state, action) => {
+        console.log("获取文章:", action.payload)
         state.articles = action.payload;
+        console.log(state.articles)
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.error = action.error.message!;
@@ -57,7 +65,9 @@ const articleSlice = createSlice({
       //   state.articles.push(action.payload);
       // })
       .addCase(deleteArticle.fulfilled, (state, action) => {
+        console.log("删除文章的action:", action.payload)
         state.articles = state.articles.filter(article => article.id !== action.payload!);
+        console.log("删除文章后的数据", state.articles)
       })
     // .addCase(updateArticle.fulfilled, (state, action) => {
     //   const index = state.articles.findIndex(article => article.id === action.payload.id);
